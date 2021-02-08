@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/{id}/edit', 'Admin\UserController@edit')->name('admin.users.edit');
             Route::post('/update', 'Admin\UserController@update')->name('admin.users.update');
             Route::get('/{id}/delete', 'Admin\UserController@delete')->name('admin.users.delete');
-
+            Route::get('/export', 'Admin\UserController@export');
         });
 
         Route::group(['prefix'  =>   'branches'], function() {

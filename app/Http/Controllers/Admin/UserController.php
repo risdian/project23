@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Mail\Contact;
 use Illuminate\Support\Str;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
 use App\Mail\InvitationEmail;
 use App\Services\ToyyibPayService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\BaseController;
 
 class UserController extends BaseController
@@ -115,5 +117,10 @@ class UserController extends BaseController
             return $this->responseRedirectBack('Error occurred while update user.', 'error', true, true);
         }
         return $this->responseRedirect('admin.users.index', 'User update successfully' ,'success',false, false);
+    }
+
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 }
