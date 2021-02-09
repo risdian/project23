@@ -72,12 +72,19 @@ class DeliveryController extends Controller
                 ->get();
 
         }
+        if(!$users->isEmpty()){
 
-        $new = [];
-        while($order = array_shift($orders)){
-            array_push($new, ...$order);
+            $new = [];
+            while($order = array_shift($orders)){
+                array_push($new, ...$order);
+            }
+            $countItem = count($new);
+
+        }else{
+            $new = [];
+            $countItem = 0;
         }
-        $countItem = count($new);
+
 
         return response()->json([
             'products' => $products,
