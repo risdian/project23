@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Config;
 
 class DashboardController extends Controller
 {
@@ -196,19 +197,26 @@ class DashboardController extends Controller
         ->select('order_product.*', 'products.user_id', 'orders.order_number')
         ->sum(DB::raw('order_product.price * order_product.quantity'));
 
-        if($order_item >= 2000 && $order_item <= 2999){
-            $total_commission = (10 / 100) * $order_item;
-        }
-        elseif($order_item >= 3000 && $order_item <= 3999){
-            $total_commission = (20 / 100) * $order_item;
-        }
-        elseif($order_item >= 4000 && $order_item <= 5999){
+        /**
+         * find the exact sale
+         * then find the range of commission
+         * take the commsion percent
+         * time the exact to commission percent
+         */
+
+        // if($order_item >= 2000 && $order_item <= 2999){
+        //     $total_commission = (10 / 100) * $order_item;
+        // }
+        // elseif($order_item >= 3000 && $order_item <= 3999){
+        //     $total_commission = (20 / 100) * $order_item;
+        // }
+        // elseif($order_item >= 4000 && $order_item <= 5999){
             $total_commission = (30 / 100) * $order_item;
-        }else{
-            $total_commission = (10 / 100) * $order_item;
+        // }else{
+        //     $total_commission = (10 / 100) * $order_item;
 
 
-        }
+        // }
 
         // return $total_commission;
 
@@ -274,38 +282,119 @@ class DashboardController extends Controller
     public function commission(Request $request){
 
         $now = Carbon::now();
+
         $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
         $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
 
-        $commission = 30;
+        if(Auth()->user()->status === 'admin'){
 
-        $total_commission = DB::table('order_product')
-        ->join('products', 'order_product.product_id', '=', 'products.id')
-        ->join('orders', 'order_product.order_id', '=', 'orders.id')
-        ->where('products.user_id', '=', Auth()->user()->id)
-        ->where('orders.status', 'completed')
-        ->where('orders.payment_status', 1)
-        ->whereBetween('orders.updated_at',[$weekStartDate,$weekEndDate])
-        // ->whereDate( 'orders.payment_datetime', date('Y-m-d',strtotime("now")))
-        ->select('order_product.*', 'products.user_id', 'orders.order_number')
-        ->sum(DB::raw('('.$commission.'/ 100) * (order_product.price * order_product.quantity)'));
+            $total_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereBetween('orders.updated_at',[$weekStartDate,$weekEndDate])
+            // ->whereDate( 'orders.payment_datetime', date('Y-m-d',strtotime("now")))
+            ->select('order_product.*', 'products.user_id', 'orders.order_number')
+            ->sum(DB::raw('order_product.price * order_product.quantity'));
 
-        $list_commission = DB::table('order_product')
-        ->join('products', 'order_product.product_id', '=', 'products.id')
-        ->join('orders', 'order_product.order_id', '=', 'orders.id')
-        ->where('products.user_id', '=', Auth()->user()->id)
-        ->where('orders.status', 'completed')
-        ->where('orders.payment_status', 1)
-        ->whereBetween('orders.updated_at',[$weekStartDate,$weekEndDate])
-        // ->where('orders.updated_at', '>', $date)
-        ->groupBy('date')
-        ->orderBy('date', 'ASC')
-        ->get(
-            array(
-                DB::raw('DATE(orders.updated_at) AS date'),
-                DB::raw('SUM( ('.$commission.'/ 100) * (order_product.price * order_product.quantity) ) as total')
-            )
-        );
+            $list_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereBetween('orders.updated_at',[$weekStartDate,$weekEndDate])
+            // ->where('orders.updated_at', '>', $date)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get(
+                array(
+                    DB::raw('DATE(orders.updated_at) AS date'),
+                    DB::raw('SUM(order_product.price * order_product.quantity) as total')
+                )
+            );
+
+        }elseif(Auth()->user()->status === 'sale_expert'){
+
+            $commission = 30;
+
+            $total_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereBetween('orders.updated_at',[$weekStartDate,$weekEndDate])
+            // ->whereDate( 'orders.payment_datetime', date('Y-m-d',strtotime("now")))
+            ->select('order_product.*', 'products.user_id', 'orders.order_number')
+            ->sum(DB::raw('('.$commission.'/ 100) * (order_product.price * order_product.quantity)'));
+
+            $list_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereBetween('orders.updated_at',[$weekStartDate,$weekEndDate])
+            // ->where('orders.updated_at', '>', $date)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get(
+                array(
+                    DB::raw('DATE(orders.updated_at) AS date'),
+                    DB::raw('SUM( ('.$commission.'/ 100) * (order_product.price * order_product.quantity) ) as total')
+                )
+            );
+        }elseif(Auth()->user()->status === 'personal_shopper_1'){
+
+
+            $commission = Config::get('settings.personal_shopper_tier_1');
+
+            $total_commission =  Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->whereYear('updated_at', date('Y', strtotime('now')))
+            ->sum(DB::raw('('.$commission.'/ 100) * (sub_total)'));
+
+
+            $list_commission = Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+
+            ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
+            ->groupBy('date')
+            ->orderBy('date', 'DESC') // or ASC
+            ->get(array(
+                DB::raw('DATE(updated_at) AS date'),
+                DB::raw('COUNT(*) as count'),
+                DB::raw('SUM(('.$commission.'/ 100) * sub_total) as total')
+            ));
+
+        }elseif(Auth()->user()->status === 'personal_shopper_2'){
+
+            $commission = Config::get('settings.personal_shopper_tier_2');
+
+            $total_commission =  Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->whereYear('updated_at', date('Y', strtotime('now')))
+            ->sum(DB::raw('('.$commission.'/ 100) * (sub_total)'));
+
+
+            $list_commission = Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+
+            ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
+            ->groupBy('date')
+            ->orderBy('date', 'DESC') // or ASC
+            ->get(array(
+                DB::raw('DATE(updated_at) AS date'),
+                DB::raw('COUNT(*) as count'),
+                DB::raw('SUM(('.$commission.'/ 100) * sub_total) as total')
+            ));
+
+        }
 
 
         return response()->json([
@@ -313,7 +402,7 @@ class DashboardController extends Controller
             'weekStartDate' => $weekStartDate,
             'weekEndDate'   => $weekEndDate,
             'historical'    => $list_commission,
-            ]);
+        ]);
 
     }
 
@@ -332,23 +421,21 @@ class DashboardController extends Controller
 
         $endDate = $request->get('endDate');
 
-        $commission = 30;
+        if(Auth()->user()->status === 'admin'){
 
         $total_commission = DB::table('order_product')
         ->join('products', 'order_product.product_id', '=', 'products.id')
         ->join('orders', 'order_product.order_id', '=', 'orders.id')
-        ->where('products.user_id', '=', Auth()->user()->id)
         ->where('orders.status', 'completed')
         ->where('orders.payment_status', 1)
         ->whereBetween('orders.updated_at',[$startDate,$endDate])
         // ->whereDate( 'orders.payment_datetime', date('Y-m-d',strtotime("now")))
         ->select('order_product.*', 'products.user_id', 'orders.order_number')
-        ->sum(DB::raw('('.$commission.'/ 100) * (order_product.price * order_product.quantity)'));
+        ->sum(DB::raw('order_product.price * order_product.quantity'));
 
         $list_commission = DB::table('order_product')
         ->join('products', 'order_product.product_id', '=', 'products.id')
         ->join('orders', 'order_product.order_id', '=', 'orders.id')
-        ->where('products.user_id', '=', Auth()->user()->id)
         ->where('orders.status', 'completed')
         ->where('orders.payment_status', 1)
         ->whereBetween('orders.updated_at',[$startDate,$endDate])
@@ -358,11 +445,44 @@ class DashboardController extends Controller
         ->get(
             array(
                 DB::raw('DATE(orders.updated_at) AS date'),
-                DB::raw('SUM( ('.$commission.'/ 100) * (order_product.price * order_product.quantity) ) as total')
+                DB::raw('order_product.price * order_product.quantity as total')
             )
         );
 
+        }elseif(Auth()->user()->status === 'sale_expert'){
 
+            $commission = 30;
+
+            $total_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereBetween('orders.updated_at',[$startDate,$endDate])
+            // ->whereDate( 'orders.payment_datetime', date('Y-m-d',strtotime("now")))
+            ->select('order_product.*', 'products.user_id', 'orders.order_number')
+            ->sum(DB::raw('('.$commission.'/ 100) * (order_product.price * order_product.quantity)'));
+
+            $list_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereBetween('orders.updated_at',[$startDate,$endDate])
+            // ->where('orders.updated_at', '>', $date)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get(
+                array(
+                    DB::raw('DATE(orders.updated_at) AS date'),
+                    DB::raw('SUM( ('.$commission.'/ 100) * (order_product.price * order_product.quantity) ) as total')
+                )
+            );
+
+
+        }
         return response()->json([
             'commission'    => $total_commission,
             'weekStartDate' => $startDate,

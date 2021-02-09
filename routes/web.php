@@ -22,22 +22,26 @@ require 'admin.php';
 
 Route::get('/aneer', function () {
 
-    $order = Order::first();
+    // $order = Order::first();
 
-    // $product = Product::all();
-    $order->products()->sync([
-        1 => [
-            'price' => '1000',
-            'quantity' => 1,
-        ],
-    2 => [
-            'price' => '300',
-            'quantity' => 3,
-        ]
-    ]);
-    $aneer = Order::first()->products()->get()->toArray();
+    // // $product = Product::all();
+    // $order->products()->sync([
+    //     1 => [
+    //         'price' => '1000',
+    //         'quantity' => 1,
+    //     ],
+    // 2 => [
+    //         'price' => '300',
+    //         'quantity' => 3,
+    //     ]
+    // ]);
+    // $aneer = Order::first()->products()->get()->toArray();
 
-    return response()->json($aneer);
+    // return response()->json($aneer);
+
+    $order = Order::find(1);
+
+    return response()->json($order->products()->get());
 
 
 });
@@ -68,7 +72,7 @@ Route::post('/payment/update', 'Site\CheckoutController@complete')->name('paymen
 
 Route::get('/invitation/{token}', 'Auth\InvitationController@password')->name('invitation.validate');
 
-Route::get('/order/print/{id}', 'Auth\DeliveryController@print');
+Route::get('/order/print/{branch}/{id}', 'Auth\DeliveryController@print');
 
 Route::group(['prefix'  =>   'orders'], function() {
 

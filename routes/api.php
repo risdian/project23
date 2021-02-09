@@ -136,7 +136,7 @@ Route::group([
         Route::group(['prefix'  =>   'branches'], function() {
 
             Route::get('', 'Auth\BranchController@index');
-
+            Route::get('/{id}', 'Auth\BranchController@getBranch');
         });
 
         Route::group(['prefix'  =>   'settings'], function() {
@@ -148,8 +148,10 @@ Route::group([
         Route::group(['prefix'  =>   'deliveries'], function() {
 
             Route::get('', 'Auth\DeliveryController@index');
-            Route::get('/{id}', 'Auth\DeliveryController@edit');
+            Route::get('/{id}/agent', 'Auth\DeliveryController@agent');
+            Route::get('/{branch}/{id}', 'Auth\DeliveryController@edit');
             Route::post('/update', 'Auth\DeliveryController@update');
+
         });
 
         Route::group(['prefix'  =>   'sales'], function() {

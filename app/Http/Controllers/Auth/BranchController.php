@@ -32,4 +32,12 @@ class BranchController extends BaseController
 
     }
 
+    public function getBranch($id){
+
+        $branch = Branch::findorfail($id);
+
+        return response()->json($branch);
+
+    }
+
 }

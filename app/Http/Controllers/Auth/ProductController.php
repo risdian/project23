@@ -52,12 +52,33 @@ class ProductController extends BaseController
     public function items()
     {
 
+        if(Auth()->user()->status == 'personal_shopper_2'){
+
+            $items = Item::where('user_id', Auth()->user()->parent_id)
+            ->get();
+
+
+
+            foreach($items as $item) {
+
+                $products[] =  $item->products()->with(
+                    array('category', 'branch', 'images' ,'items' => function($query) {
+                            $query->where('user_id', Auth()->user()->id);
+                        }))
+                        ->get();
+
+            }
+
+            $new = [];
+            while($product = array_shift($products)){
+                array_push($new, ...$product);
+            }
+
+            return response()->json($new);
+
+        }
+
         $products = Product::with(
-
-            // Item::where('user_id', Auth::user()->id)
-
-            // ->get()
-
             array('category', 'branch', 'images' ,'items' => function($query) {
                 $query->where('user_id', Auth()->user()->id);
             })

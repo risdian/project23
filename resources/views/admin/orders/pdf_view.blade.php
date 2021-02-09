@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ $order->number}}</title>
+    <title>{{ $order->order_number}}</title>
     <style>
         .logo{
             max-height: 100px;
@@ -29,51 +29,51 @@
             <table class="tg">
             <thead>
               <tr>
-                <th class="tg-y7gf" colspan="4">LOGO</th>
-                <th class="tg-y7gf" colspan="4">aneer</th>
-                <th class="tg-x61c" colspan="4">EZ</th>
+                <th class="tg-y7gf" colspan="4">Al ikhlas gadget</th>
+                <th class="tg-y7gf" colspan="4"></th>
+                <th class="tg-x61c" colspan="4">{{ $order->delivery_method }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              {{-- <tr>
                 <td class="tg-nfig" colspan="12">799123456789</td>
+              </tr> --}}
+              <tr>
+                <td class="tg-73oq" colspan="7">SEND DATE: 1/2/2020<br>ORDER NUMBER : {{ $order->order_number }}</td>
+                <td class="tg-0pky" colspan="5"><span style="font-weight:bold">{{ $order->city }}</span><br>{{ $order->postcode }}</td>
               </tr>
               <tr>
-                <td class="tg-73oq" colspan="7">SEND DATE: 1/2/2020<br>ORDER NUMBER : 12345678910</td>
-                <td class="tg-0pky" colspan="5"><span style="font-weight:bold">Belanga city</span><br>1643</td>
-              </tr>
-              <tr>
-                <td class="tg-nfig" colspan="12">45120-12564</td>
+                <td class="tg-nfig" colspan="12">{{ $tracking }}</td>
               </tr>
               <tr>
                 <td class="tg-73oq" style="border:none;  border-left: 1px solid black;"  colspan="1"></td>
-                <td class="tg-0pky" colspan="6" style="border:none;  border-left: 1px solid black;" >AL IKHLAS GADGET BBU</td>
-                <td class="tg-0pky" colspan="5" style="border:none;  border-right: 1px solid black;" >0173519861</td>
+                <td class="tg-0pky" colspan="6" style="border:none;  border-left: 1px solid black;" >{{ $branch->name }}</td>
+                <td class="tg-0pky" colspan="5" style="border:none;  border-right: 1px solid black;" >{{ $branch->phone_number}}</td>
               </tr>
               <tr>
                 <td class="tg-73oq" style="border:none;  border-left: 1px solid black;" colspan="1">From</td>
-                <td class="tg-0pky" colspan="11" style="border:none;   border-left: 1px solid black;  border-right: 1px solid black;" >No 98 jalan impian emas 10 taman impian emas</td>
+                <td class="tg-0pky" colspan="11" style="border:none;   border-left: 1px solid black;  border-right: 1px solid black;" >{{ $branch->address }} {{ $branch->postcode }} {{ $branch->city }} {{ $branch->state }} {{ $branch->country }}</td>
               </tr>
               <tr>
                 <td class="tg-73oq" style="border:none;  border-left: 1px solid black; border-bottom: 1px solid black;"  colspan="1"></td>
-                <td class="tg-0pky" colspan="6" style="border:none;   border-left: 1px solid black;  border-bottom: 1px solid black;" >bagon silan batam</td>
-                <td class="tg-0pky" colspan="5" style="border:none;  border-bottom: 1px solid black;  border-right: 1px solid black;" >belanga city</td>
+                <td class="tg-0pky" colspan="6" style="border:none;   border-left: 1px solid black;  border-bottom: 1px solid black;" >{{ $branch->city }}, {{ $branch->state }}</td>
+                <td class="tg-0pky" colspan="5" style="border:none;  border-bottom: 1px solid black;  border-right: 1px solid black;" >{{ $branch->city }}</td>
               </tr>
               <tr>
                 <td class="tg-73oq"  style="border:none;  border-left: 1px solid black;"></td>
-                <td class="tg-0pky" colspan="6" style="border:none;   border-left: 1px solid black;" >Zone B</td>
-                <td class="tg-0pky" colspan="5" style="border:none;  border-right: 1px solid black;" >0173519861</td>
+                <td class="tg-0pky" colspan="6" style="border:none;   border-left: 1px solid black;" >{{ $order->name }}</td>
+                <td class="tg-0pky" colspan="5" style="border:none;  border-right: 1px solid black;" >{{ $order->phone_number }}</td>
               </tr>
               <tr>
                 <td class="tg-73oq" style="border:none;  border-left: 1px solid black;">To</td>
-                <td class="tg-0pky" colspan="11" style="border:none;   border-left: 1px solid black;  border-right: 1px solid black;" >No 98 jalan impian emas 10 taman impian emas</td>
+                <td class="tg-0pky" colspan="11" style="border:none;   border-left: 1px solid black;  border-right: 1px solid black;" >{{ $order->address }} {{ $order->postcode }} {{ $order->city }} {{ $order->state }} {{ $order->country }}</td>
               </tr>
               <tr>
                 <td class="tg-73oq" style="border:none;  border-left: 1px solid black;"></td>
-                <td class="tg-0pky" colspan="6" style="border:none;   border-left: 1px solid black;" >bagon silan</td>
-                <td class="tg-0pky" colspan="5" style="border:none;  border-right: 1px solid black;" >belanga city</td>
+                <td class="tg-0pky" colspan="6" style="border:none;   border-left: 1px solid black;" >{{ $order->city }}, {{ $order->state }}</td>
+                <td class="tg-0pky" colspan="5" style="border:none;  border-right: 1px solid black;" >{{ $order->city }}</td>
               </tr>
-              <tr>
+              {{-- <tr>
                 <td class="tg-7btt" colspan="7">No of delivery item</td>
                 <td class="tg-0pky" colspan="5" style="border: none; border-top: 1px solid black;  border-right: 1px solid black;">COD 80</td>
               </tr>
@@ -81,14 +81,14 @@
                 <td class="tg-c3ow" colspan="2">1</td>
                 <td class="tg-c3ow" colspan="5">2</td>
                 <td class="tg-0pky" colspan="5" style="border: none; border-right: 1px solid black;">PHP</td>
-              </tr>
+              </tr> --}}
               <tr>
                 <td class="tg-0pky" colspan="7">Piece 1<br>weight 200kg<br>good: Box/Pouch</td>
                 <td class="tg-0pky" colspan="5">Signature</td>
               </tr>
               <tr>
-                <td class="tg-xam4" colspan="3"><span style="font-weight:bold">thank you for shopping at al ikhlas gadget</span><br>please click order received and rate this product<br><br></td>
-                <td class="tg-y7gf" colspan="9"><span style="font-weight:bold">781253</span></td>
+                <td class="tg-xam4" colspan="12"><span style="font-weight:bold">thank you for shopping at al ikhlas gadget</span><br>please click order received and rate this product<br><br></td>
+                {{-- <td class="tg-y7gf" colspan="9"><span style="font-weight:bold">781253</span></td> --}}
               </tr>
             </tbody>
             </table>
