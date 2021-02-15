@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,95 @@ use Illuminate\Support\Facades\Config;
 
 class DashboardController extends Controller
 {
+
+    public function index(){
+
+        if(Auth()->user()->status === 'personal_shopper_1'){
+            $users = User::where('parent_id', Auth()->user()->id)->pluck('id')->toArray();
+
+            $agent_sale = Order::whereIn('user_id', $users)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->sum('grand_total');
+
+            $ps_sale =  Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->sum('grand_total');
+
+            $agent_commission = Order::whereIn('user_id', $users)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->sum(
+                DB::raw('(ps_agent_commission/ 100) * (sub_total)')
+            );
+
+            $ps_commission =  Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->sum(DB::raw('(ps_commission/ 100) * (sub_total)'));
+
+            $total_sale = $ps_sale + $agent_sale;
+            $total_commission = $ps_commission + $agent_commission;
+
+        }elseif(Auth()->user()->status === 'sale_expert'){
+
+            $now = Carbon::now();
+
+            $total_sale = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereYear('orders.updated_at', $now)
+            ->whereMonth('orders.updated_at', $now)
+            ->select('order_product.*', 'products.user_id', 'orders.order_number')
+            ->sum(DB::raw('order_product.price * order_product.quantity'));
+
+            $total_sale_status = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereYear('orders.updated_at', $now)
+            ->whereMonth('orders.updated_at', $now)
+            ->take(1)->get();
+
+            $commission_id = $total_sale_status->pluck('se_commission')->toArray();
+
+
+            $commission = Commission::where('id', $commission_id)->first();
+
+            $comission_attributes = $commission->attributes()
+                ->where('range_end', '>=', $total_sale)
+                ->first();
+
+            $total_commission = ($comission_attributes->price / 100) * $total_sale;
+
+        }elseif(Auth()->user()->status === 'personal_shopper_2'){
+
+            $total_sale =  Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->sum('grand_total');
+
+            $total_commission =  Order::where('user_id', Auth()->user()->id)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->whereYear('updated_at', date('Y', strtotime('now')))
+            ->sum(DB::raw('(agent_commission/ 100) * (sub_total)'));
+        }
+
+        return response()->json([
+            'total_commission'  => $total_commission,
+            'total_sale'        => $total_sale,
+        ]);
+
+
+    }
+
     public function sales(){
 
         // tomorrow -1 week returns tomorrow's 00:00:00 minus 7 days
@@ -350,25 +440,93 @@ class DashboardController extends Controller
 
             $commission = Config::get('settings.personal_shopper_tier_1');
 
+            $users = User::where('parent_id', Auth()->user()->id)->pluck('id')->toArray();
+
             $total_commission =  Order::where('user_id', Auth()->user()->id)
             ->where('payment_status', 1)
             ->where('status', 'completed')
             ->whereYear('updated_at', date('Y', strtotime('now')))
-            ->sum(DB::raw('('.$commission.'/ 100) * (sub_total)'));
+            ->sum(DB::raw('(ps_commission/ 100) * (sub_total)'));
 
 
             $list_commission = Order::where('user_id', Auth()->user()->id)
             ->where('payment_status', 1)
             ->where('status', 'completed')
-
             ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
             ->groupBy('date')
             ->orderBy('date', 'DESC') // or ASC
             ->get(array(
                 DB::raw('DATE(updated_at) AS date'),
                 DB::raw('COUNT(*) as count'),
-                DB::raw('SUM(('.$commission.'/ 100) * sub_total) as total')
+                DB::raw('SUM((ps_commission/ 100) * sub_total) as total')
             ));
+
+
+            $agent_commission = Order::whereIn('user_id', $users)
+            ->where('payment_status', 1)
+            ->where('status', 'completed')
+            ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
+            ->groupBy('date')
+            ->orderBy('date', 'DESC') // or ASC
+            ->get(array(
+                DB::raw('DATE(updated_at) AS date'),
+                DB::raw('COUNT(*) as count'),
+                DB::raw('SUM((ps_agent_commission/ 100) * sub_total) as total')
+            ));
+
+
+            return $agent_commission;
+
+
+            foreach($users as $user) {
+
+                $ps_agent_commission[] =  $user->orders()->with('user')
+                    ->where('payment_status', '1')
+                    ->where('status', 'completed')
+                    ->sum(DB::raw('(ps_agent_commission / 100) * sub_total'));
+
+                $ps_agent_list_commission[] = $user->orders()
+                    ->where('payment_status', '1')
+                    ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
+                    ->where('status', 'completed')
+                    ->groupBy('date')
+                    ->orderBy('date', 'DESC') // or ASC
+                    ->get(array(
+                        DB::raw('DATE(updated_at) AS date'),
+                        DB::raw('COUNT(*) as count'),
+                        DB::raw('SUM((ps_agent_commission/ 100) * sub_total) as subTotal')
+                    ));
+
+                $agent[] = $user->orders()->get();
+
+            }
+
+            $collection = collect($agent)
+                ->groupBy('updated_at')
+                ->toArray();
+
+            return $collection;
+
+
+
+
+
+
+
+            $total_agent_commission = collect($ps_agent_list_commission)
+                ->groupBy('date')
+                ->map(function($list){
+                    return array_merge(...$list->toArray());
+                })->collapse()->sum('subTotal');
+
+            return response()->json([
+                'commission'    => $total_commission,
+                'weekStartDate' => $weekStartDate,
+                'weekEndDate'   => $weekEndDate,
+                'historical'    => $list_commission,
+                'ps_agent_commission' => $ps_agent_commission,
+                'ps_agent_list_commission' => $ps_agent_list_commission,
+            ]);
 
         }elseif(Auth()->user()->status === 'personal_shopper_2'){
 
@@ -378,7 +536,7 @@ class DashboardController extends Controller
             ->where('payment_status', 1)
             ->where('status', 'completed')
             ->whereYear('updated_at', date('Y', strtotime('now')))
-            ->sum(DB::raw('('.$commission.'/ 100) * (sub_total)'));
+            ->sum(DB::raw('(agent_commission/ 100) * (sub_total)'));
 
 
             $list_commission = Order::where('user_id', Auth()->user()->id)
@@ -391,18 +549,19 @@ class DashboardController extends Controller
             ->get(array(
                 DB::raw('DATE(updated_at) AS date'),
                 DB::raw('COUNT(*) as count'),
-                DB::raw('SUM(('.$commission.'/ 100) * sub_total) as total')
+                DB::raw('SUM((agent_commission/ 100) * sub_total) as total')
             ));
 
+            return response()->json([
+                'commission'    => $total_commission,
+                'weekStartDate' => $weekStartDate,
+                'weekEndDate'   => $weekEndDate,
+                'historical'    => $list_commission,
+            ]);
         }
 
 
-        return response()->json([
-            'commission'    => $total_commission,
-            'weekStartDate' => $weekStartDate,
-            'weekEndDate'   => $weekEndDate,
-            'historical'    => $list_commission,
-        ]);
+
 
     }
 

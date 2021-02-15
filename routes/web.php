@@ -66,7 +66,7 @@ Route::get('/cart/clear', 'Site\CartController@clearCart')->name('checkout.cart.
 
 Route::get('/payment/complete', 'Site\CheckoutController@complete')->name('complete.payment');
 
-Route::get('/order/complete/{order_number}', 'Site\CheckoutController@order')->name('order.complete');
+Route::get('/orders/complete/{order_number}', 'Site\CheckoutController@order')->name('order.complete');
 
 Route::post('/payment/update', 'Site\CheckoutController@complete')->name('payment.update');
 
@@ -78,6 +78,8 @@ Route::group(['prefix'  =>   'orders'], function() {
 
 
     Route::get('/{order_number}', 'Site\OrderController@index');
+
+    Route::get('/trackings/{order_number}', 'Site\Ordercontroller@tracking');
 
 
 });

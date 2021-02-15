@@ -19,6 +19,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/settings', 'Admin\SettingController@index')->name('admin.settings');
         Route::post('/settings', 'Admin\SettingController@update')->name('admin.settings.update');
 
+
+        Route::group(['prefix'  =>   'settings'], function() {
+
+            Route::get('/commissions', 'Admin\CommissionController@index')->name('admin.commissions.index');
+            Route::get('/commissions/create', 'Admin\CommissionController@create')->name('admin.commissions.create');
+
+
+        });
+
+
         Route::group(['prefix'  =>   'users'], function() {
 
             Route::get('/', 'Admin\UserController@index')->name('admin.users.index');

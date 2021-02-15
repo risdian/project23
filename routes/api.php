@@ -156,9 +156,44 @@ Route::group([
 
         Route::group(['prefix'  =>   'sales'], function() {
 
+            Route::get('/index', 'Auth\DashboardController@index');
+
             Route::get('', 'Auth\DashboardController@sales');
             Route::get('/commission', 'Auth\DashboardController@commission');
             Route::post('/commission/sale', 'Auth\DashboardController@search');
+        });
+
+
+        Route::group(['prefix'  =>   'reports'], function() {
+
+            Route::get('/personal_shopper', 'Auth\ReportController@personal_shopper_report');
+            Route::post('/personal_shopper/search', 'Auth\ReportController@personal_shopper_search');
+            Route::get('/agent', 'Auth\ReportController@agent_report');
+            Route::post('/agent/search', 'Auth\ReportController@agent_report');
+            Route::get('/sale_expert', 'Auth\ReportController@sale_expert_report');
+            Route::post('/sale_expert/search', 'Auth\ReportController@sale_expert_report_search');
+            Route::get('/personal_shopper/details/{date}', 'Auth\ReportController@personal_shopper_report_details');
+            Route::get('/personal_shopper/agent/{date}', 'Auth\ReportController@agent_shopper_report_details');
+            Route::get('/personal_shopper/sale_expert/{date}', 'Auth\ReportController@sale_expert_report_details');
+
+        });
+
+        Route::group(['prefix'  =>   'withdrawals'], function() {
+
+            Route::get('', 'Auth\WithdrawalController@index');
+            Route::post('/store', 'Auth\WithdrawalController@store');
+
+        });
+
+        Route::group(['prefix'  =>   'bank-accounts'], function() {
+
+            Route::get('', 'Auth\BankAccountController@index');
+            Route::post('/store', 'Auth\BankAccountController@store');
+            Route::get('/{id}', 'Auth\BankAccountController@edit');
+            Route::post('/{id}/update', 'Auth\BankAccountController@update');
+            Route::delete('delete/{id}', 'Auth\BankAccountController@delete');
+
+
         });
 
         Route::group(['prefix'  =>   'searching'], function() {

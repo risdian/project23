@@ -22,9 +22,13 @@ class OrderRepository extends BaseRepository implements OrderContract
 
         $collection = collect($params)->except('_token');
 
-        $status         = 'pending';
-        $user_id        = auth()->user()->id;
-        $order_number   = 'ORD-'.strtoupper(uniqid());
+        $status                 = 'pending';
+        $user_id                = auth()->user()->id;
+        $order_number           = 'ORD-'.strtoupper(uniqid());
+        $ps_commission          = config('settings.personal_shopper_tier_1');
+        $agent_commission       = config('settings.personal_shopper_tier_2');
+        $ps_agent_commission    = config('settings.personal_shopper_tier_3');
+        $se_commission          = '2';
         // $grand_total    =  100;
         // $item_count     =  100;
         // $sub_total      =  100;
@@ -36,6 +40,10 @@ class OrderRepository extends BaseRepository implements OrderContract
                 'status',
                 'user_id',
                 'order_number',
+                'ps_commission',
+                'agent_commission',
+                'ps_agent_commission',
+                'se_commission',
                 )
             );
 
@@ -59,12 +67,19 @@ class OrderRepository extends BaseRepository implements OrderContract
 
                 }
 
+                $product = Product::find($item['id']);
+                $product->decrement('quantity', $item['amount']);
+
                 $item_id_array[$item['id']] = ['price' => $price, 'quantity' => $item['amount']];
 
             }
 
+
+
             //Insert into order_products table
             $order->products()->sync($item_id_array);//dont delete old entries = false
+
+
 
         }
 

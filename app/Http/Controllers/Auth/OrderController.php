@@ -43,7 +43,6 @@ class OrderController extends BaseController
 
         $order = $this->orderRepository->storeAppOrderDetails($request->all());
 
-        // $payment = $this->orderRepository->updateAppOrderDetails($order);
         $this->toyyibPay->processPayment($order);
 
         return response()->json($order);

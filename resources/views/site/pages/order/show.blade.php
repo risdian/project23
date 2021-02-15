@@ -32,12 +32,29 @@
         <article class="card-body">
             <header class="mb-4">
                 <h4 class="card-title">Order number : {{ $order->order_number }}</h4>
+
+                <h4 class="card-title">Order payment : {{ $payment }}</h4>
+
+                @foreach ($trackings as $key =>  $tracking)
+
+                    <h4 class="card-title">Track : {{ $key+1 }}</h4>
+
+                @endforeach
+
             </header>
                 <div class="row">
                     @foreach( $products as $product)
                     <div class="col-md-6">
                         <figure class="itemside  mb-3">
-                            <div class="aside"><img src="{{ asset('storage/'.$product->detail_image) }}" class="border img-md"></div>
+
+                            <div class="aside">
+                                @if($product->images->count() > 0)
+                                <img src="{{ asset('storage/'.$product->images->first()->full) }}" class="border img-md">
+                                @else
+                                <img src="https://via.placeholder.com/176" class="border img-md">
+                                @endif
+                            </div>
+
                             <figcaption class="info">
                                 <p>{{ $product->name }}</p>
                                 <span>{{ $product->pivot->quantity }} x {{ config('settings.currency_symbol'). number_format((float)$product->pivot->price, 2, '.', '')}} = Total: {{ config('settings.currency_symbol'). number_format((float)$product->pivot->price * $product->pivot->quantity, 2, '.', '')}} </span>

@@ -36,6 +36,10 @@ class CreateOrdersTable extends Migration
             $table->string('delivery_method')->nullable();
             $table->string('delivery_price')->nullable();
 
+            $table->decimal('ps_commission');
+            $table->decimal('agent_commission');
+            $table->decimal('ps_agent_commission');
+
             $table->string('name');
             $table->string('email');
             $table->text('address');

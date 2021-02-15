@@ -16,6 +16,7 @@ class Order extends Model
         'payment_datetime',
         'payment_transaction_id',
         'name', 'address', 'city', 'state', 'country', 'postcode', 'phone_number', 'notes', 'email',
+        'ps_commission','agent_commission', 'ps_agent_commission', 'se_commission'
 
 
     ];
@@ -29,12 +30,6 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-
-    // public function orderItem(){
-
-    //     return $this->belongsToMany(Product::class);
-
-    // }
 
     public function products(){
 
