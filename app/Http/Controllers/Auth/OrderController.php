@@ -34,11 +34,13 @@ class OrderController extends BaseController
         $this->validate($request, [
             'name' => 'required',
             'address' => 'required',
+            'email'     => 'required',
             'city' => 'required',
             'state' => 'required',
             'country' => 'required',
             'postcode' => 'required',
             'phone_number' => 'required',
+
         ]);
 
         $order = $this->orderRepository->storeAppOrderDetails($request->all());
