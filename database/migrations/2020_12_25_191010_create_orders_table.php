@@ -39,6 +39,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('ps_commission');
             $table->decimal('agent_commission');
             $table->decimal('ps_agent_commission');
+            $table->unsignedBigInteger('se_commission');
 
             $table->string('name');
             $table->string('email');

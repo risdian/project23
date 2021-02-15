@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Contracts\OrderContract;
+use App\Models\Commission;
 use App\Repositories\BaseRepository;
 
 class OrderRepository extends BaseRepository implements OrderContract
@@ -20,6 +21,10 @@ class OrderRepository extends BaseRepository implements OrderContract
 
     public function storeAppOrderDetails($params){
 
+        $se_commissions = Commission::where('status', 1)->first();
+
+
+
         $collection = collect($params)->except('_token');
 
         $status                 = 'pending';
@@ -28,7 +33,7 @@ class OrderRepository extends BaseRepository implements OrderContract
         $ps_commission          = config('settings.personal_shopper_tier_1');
         $agent_commission       = config('settings.personal_shopper_tier_2');
         $ps_agent_commission    = config('settings.personal_shopper_tier_3');
-        $se_commission          = '2';
+        $se_commission          = $se_commissions->id;
         // $grand_total    =  100;
         // $item_count     =  100;
         // $sub_total      =  100;

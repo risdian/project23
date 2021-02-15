@@ -2,6 +2,7 @@
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Commission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,10 +40,13 @@ Route::get('/aneer', function () {
 
     // return response()->json($aneer);
 
-    $order = Order::find(1);
+    // $order = Order::find(1);
 
-    return response()->json($order->products()->get());
+    // return response()->json($order->products()->get());
 
+    $se_commission = Commission::where('user_id', 1)->first();
+
+    return $se_commission->id;
 
 });
 
