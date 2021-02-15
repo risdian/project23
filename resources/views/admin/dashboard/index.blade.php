@@ -7,41 +7,47 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small primary coloured-icon">
-                <i class="icon fa fa-users fa-3x"></i>
-                <div class="info">
-                    <h4>Users</h4>
-                    <p><b>5</b></p>
-                </div>
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">Monthly Sales</h3>
+            <div class="embed-responsive embed-responsive-16by9">
+              <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
             </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small info coloured-icon">
-                <i class="icon fa fa-thumbs-o-up fa-3x"></i>
-                <div class="info">
-                    <h4>Likes</h4>
-                    <p><b>25</b></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small warning coloured-icon">
-                <i class="icon fa fa-files-o fa-3x"></i>
-                <div class="info">
-                    <h4>Uploades</h4>
-                    <p><b>10</b></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small danger coloured-icon">
-                <i class="icon fa fa-star fa-3x"></i>
-                <div class="info">
-                    <h4>Stars</h4>
-                    <p><b>500</b></p>
-                </div>
-            </div>
+          </div>
         </div>
     </div>
+    <!-- Essential javascripts for application to work-->
+    <script src="{{ asset('backend/js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('backend/js/popper.min.js')}}"></script>
+    <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('backend/js/main.js') }}"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="{{ asset('backend/js/plugins/pace.min.js') }}"></script>
+    <!-- Page specific javascripts-->
+    <script type="text/javascript" src="{{ asset('backend/js/plugins/chart.js') }}"></script>
+    <script type="text/javascript">
+      var data = {
+      	labels: {!!json_encode($list->pluck('date'))!!},
+      	datasets: [
+      		{
+      			label: "Sales",
+      			fillColor: "rgba(220,220,220,0.2)",
+      			strokeColor: "rgba(220,220,220,1)",
+      			pointColor: "rgba(220,220,220,1)",
+      			pointStrokeColor: "#fff",
+      			pointHighlightFill: "#fff",
+      			pointHighlightStroke: "rgba(220,220,220,1)",
+      			data: {!!json_encode($list->pluck('sale'))!!}
+      		},
+
+      	]
+      };
+
+
+      var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+      var lineChart = new Chart(ctxl).Line(data);
+
+
+    </script>
+
 @endsection

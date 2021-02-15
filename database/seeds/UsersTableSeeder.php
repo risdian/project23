@@ -22,6 +22,7 @@ class UsersTableSeeder extends Seeder
             'email'         =>  'admin@admin.com',
             'password'      =>  bcrypt('password'),
             'status'        =>  'admin',
+            'parent_id'     =>  '0',
         ]);
 
         User::create([
@@ -31,6 +32,7 @@ class UsersTableSeeder extends Seeder
             'email'         =>  'sale@expert.com',
             'password'      =>  bcrypt('password'),
             'status'        =>  'sale_expert',
+            'parent_id'     =>  '1',
         ]);
 
         User::create([
@@ -40,6 +42,7 @@ class UsersTableSeeder extends Seeder
             'email'         =>  'personal@shopper.com',
             'password'      =>  bcrypt('password'),
             'status'        =>  'personal_shopper_1',
+            'parent_id'     =>  '2',
         ]);
 
         User::create([
@@ -49,6 +52,7 @@ class UsersTableSeeder extends Seeder
             'email'         =>  'agent@agent.com',
             'password'      =>  bcrypt('password'),
             'status'        =>  'personal_shopper_2',
+            'parent_id'     =>  '3',
         ]);
     }
 }

@@ -10,11 +10,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::post('login', 'Admin\LoginController@login')->name('admin.login.post');
         // Route::get('logout', 'Admin\LoginController@logout')->name('admin.logout');
 
-        Route::get('/', function () {
-
-            return view('admin.dashboard.index');
-
-        })->name('admin.dashboard');
+        Route::get('/', 'Admin\DashboardController@index')->name('admin.dashboard');
 
         Route::get('/settings', 'Admin\SettingController@index')->name('admin.settings');
         Route::post('/settings', 'Admin\SettingController@update')->name('admin.settings.update');
