@@ -23,4 +23,20 @@ class CommissionController extends BaseController
         $this->setPageTitle('Commission', 'Create Commission');
         return view('admin.commissions.create');
     }
+
+    public function store(Request $request){
+
+        $request->validate([
+            "name"      => 'required',
+            "price"    => "required|array|min:1",
+            "price.*"  => "required|string|distinct|min:1",
+            "min"    => "required|array|min:1",
+            "min.*"  => "required|string|distinct|min:1",
+            "max"    => "required|array|min:1",
+            "max.*"  => "required|string|distinct|min:1",
+        ]);
+
+        return 'aneer';
+
+    }
 }

@@ -16,11 +16,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/settings', 'Admin\SettingController@update')->name('admin.settings.update');
 
 
-        Route::group(['prefix'  =>   'settings'], function() {
+        Route::group(['prefix'  =>   'commissions'], function() {
 
-            Route::get('/commissions', 'Admin\CommissionController@index')->name('admin.commissions.index');
-            Route::get('/commissions/create', 'Admin\CommissionController@create')->name('admin.commissions.create');
-
+            Route::get('', 'Admin\CommissionController@index')->name('admin.commissions.index');
+            Route::get('/create', 'Admin\CommissionController@create')->name('admin.commissions.create');
+            Route::post('/store', 'Admin\CommissionController@store')->name('admin.commissions.store');
 
         });
 

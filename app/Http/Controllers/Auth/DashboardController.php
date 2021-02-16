@@ -77,11 +77,22 @@ class DashboardController extends Controller
 
             $commission = Commission::where('id', $commission_id)->first();
 
-            $comission_attributes = $commission->attributes()
+            if($commission != null){
+
+
+                $comission_attributes = $commission->attributes()
                 ->where('range_end', '>=', $total_sale)
                 ->first();
 
-            $total_commission = ($comission_attributes->price / 100) * $total_sale;
+                $total_commission = ($comission_attributes->price / 100) * $total_sale;
+
+            }else{
+
+                $total_commission = 0;
+
+            }
+
+
 
         }elseif(Auth()->user()->status === 'personal_shopper_2'){
 
