@@ -330,34 +330,41 @@ class ReportController extends Controller
         ->take(1)->get();
 
         $commission_id = $total_sale_status->pluck('se_commission')->toArray();
-
-
         $commission = Commission::where('id', $commission_id)->first();
 
-        $comission_attributes = $commission->attributes()
-            ->where('range_end', '>=', $total_sale)
-            ->first();
+        if($commission != null){
 
-        $total_commission = ($comission_attributes->price / 100) * $total_sale;
+            $comission_attributes = $commission->attributes()
+                ->where('range_end', '>=', $total_sale)
+                ->first();
 
-        $list_commission = DB::table('order_product')
-        ->join('products', 'order_product.product_id', '=', 'products.id')
-        ->join('orders', 'order_product.order_id', '=', 'orders.id')
-        ->where('products.user_id', '=', Auth()->user()->id)
-        ->where('orders.status', 'completed')
-        ->where('orders.payment_status', 1)
-        ->whereYear('orders.updated_at', $now)
-        ->whereMonth('orders.updated_at', $now)
-        ->groupBy('date')
-        ->orderBy('date', 'ASC')
-        ->get(
-            array(
-                DB::raw('DATE(orders.updated_at) AS date'),
-                DB::raw('COUNT(*) as count'),
-                DB::raw('SUM(order_product.price * order_product.quantity) as sale'),
-                DB::raw('SUM( ('.$comission_attributes->price.'/ 100) * (order_product.price * order_product.quantity) ) as commission')
-            )
-        );
+            $total_commission = ($comission_attributes->price / 100) * $total_sale;
+
+            $list_commission = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('products.user_id', '=', Auth()->user()->id)
+            ->where('orders.status', 'completed')
+            ->where('orders.payment_status', 1)
+            ->whereYear('orders.updated_at', $now)
+            ->whereMonth('orders.updated_at', $now)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get(
+                array(
+                    DB::raw('DATE(orders.updated_at) AS date'),
+                    DB::raw('COUNT(*) as count'),
+                    DB::raw('SUM(order_product.price * order_product.quantity) as sale'),
+                    DB::raw('SUM( ('.$comission_attributes->price.'/ 100) * (order_product.price * order_product.quantity) ) as commission')
+                )
+            );
+
+        }else{
+
+            $total_commission = 0;
+            $list_commission = [];
+
+        }
 
         return response()->json([
             'total_sale'        => $total_sale,
