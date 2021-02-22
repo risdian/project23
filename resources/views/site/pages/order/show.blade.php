@@ -36,8 +36,9 @@
                 <h4 class="card-title">Order payment : {{ $payment }}</h4>
 
                 @foreach ($trackings as $key =>  $tracking)
+                    <h4 class="card-title">Tracking</h4>
+                    <a href="{{ route('site.shippings.view', [$tracking->branch_id, $tracking->order_number ]) }}" class="btn btn-sm btn-danger"><i class="fa fa-shipping-fast"></i> Tracking your parcel</a>
 
-                    <h4 class="card-title">Track : {{ $key+1 }}</h4>
 
                 @endforeach
 

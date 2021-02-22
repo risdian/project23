@@ -24,20 +24,27 @@ class OrderRepository extends BaseRepository implements OrderContract
         $se_commissions = Commission::where('status', 1)->first();
 
 
-
         $collection = collect($params)->except('_token');
+
+        if($collection->has('email')){
+
+            $customer_email = $params['email'];
+
+        }else{
+
+            $customer_email = Auth()->user()->email;
+
+        }
+
 
         $status                 = 'pending';
         $user_id                = auth()->user()->id;
         $order_number           = 'ORD-'.strtoupper(uniqid());
-        $ps_commission          = config('settings.personal_shopper_tier_1');
-        $agent_commission       = config('settings.personal_shopper_tier_2');
-        $ps_agent_commission    = config('settings.personal_shopper_tier_3');
+        $ps_commission          = config('settings.personal_shopper_commission');
+        $agent_commission       = config('settings.agent_commission');
+        $ps_agent_commission    = config('settings.personal_shopper_agent_commission');
         $se_commission          = $se_commissions->id;
-        // $grand_total    =  100;
-        // $item_count     =  100;
-        // $sub_total      =  100;
-        // $tax            =  100;
+        $email                  = $customer_email;
 
         $merge = $collection
         ->merge(
@@ -49,6 +56,7 @@ class OrderRepository extends BaseRepository implements OrderContract
                 'agent_commission',
                 'ps_agent_commission',
                 'se_commission',
+                'email',
                 )
             );
 
@@ -165,6 +173,6 @@ class OrderRepository extends BaseRepository implements OrderContract
 
     public function findOrderById($id)
     {
-        return Order::where('id', $id)->first();
+        return Order::where('id', $id)->with('user')->first();
     }
 }

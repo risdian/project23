@@ -14,7 +14,7 @@ class CommissionAttributes extends Model
     /**
      * @var array
      */
-    protected $fillable = ['commission_id', 'range_start', 'range_end'];
+    protected $fillable = ['commission_id', 'value', 'min', 'max'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

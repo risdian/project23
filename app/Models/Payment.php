@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Commission extends Model
+class Payment extends Model
 {
     /**
      * @var string
      */
-    protected $table = 'commissions';
+    protected $table = 'payments';
 
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'status', 'start_date'];
+    protected $fillable = ['user_id', 'start_date', 'end_date'];
 
     public function user()
     {
@@ -24,6 +24,6 @@ class Commission extends Model
 
     public function attributes()
     {
-        return $this->hasMany(CommissionAttributes::class);
+        return $this->hasMany(PaymentAttribute::class);
     }
 }

@@ -16,13 +16,55 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/settings', 'Admin\SettingController@update')->name('admin.settings.update');
 
 
-        Route::group(['prefix'  =>   'commissions'], function() {
+        Route::group(['prefix'  =>   'sale-expert/commissions'], function() {
 
-            Route::get('', 'Admin\CommissionController@index')->name('admin.commissions.index');
-            Route::get('/create', 'Admin\CommissionController@create')->name('admin.commissions.create');
-            Route::post('/store', 'Admin\CommissionController@store')->name('admin.commissions.store');
+            Route::get('', 'Admin\SaleExpertCommissionController@index')->name('admin.sale-expert.commissions.index');
+            Route::get('/create', 'Admin\SaleExpertCommissionController@create')->name('admin.sale-expert.commissions.create');
+            Route::post('/store', 'Admin\SaleExpertCommissionController@store')->name('admin.sale-expert.commissions.store');
+            Route::get('/{id}/edit', 'Admin\SaleExpertCommissionController@edit')->name('admin.sale-expert.commissions.edit');
+            Route::post('/update', 'Admin\SaleExpertCommissionController@update')->name('admin.sale-expert.commissions.update');
+            Route::post('/status', 'Admin\SaleExpertCommissionController@status')->name('admin.sale-expert.commissions.status');
 
         });
+
+        Route::group(['prefix'  =>   'sale-expert/users'], function() {
+
+            Route::get('', 'Admin\SaleExpertController@index')->name('admin.sale-expert.users.index');
+            Route::get('/create', 'Admin\SaleExpertController@create')->name('admin.sale-expert.users.create');
+            Route::get('/{id}/view', 'Admin\SaleExpertController@view')->name('admin.sale-expert.users.view');
+
+            // Route::post('/store', 'Admin\CommissionController@store')->name('admin.commissions.store');
+            // Route::get('/{id}/edit', 'Admin\CommissionController@edit')->name('admin.commissions.edit');
+            // Route::post('/update', 'Admin\CommissionController@update')->name('admin.commissions.update');
+            // Route::post('/status', 'Admin\CommissionController@status')->name('admin.commissions.status');
+
+        });
+
+        Route::group(['prefix'  =>   'personal-shopper/users'], function() {
+
+            Route::get('', 'Admin\PersonalShopperController@index')->name('admin.personal-shopper.users.index');
+            Route::get('/create', 'Admin\PersonalShopperController@create')->name('admin.personal-shopper.users.create');
+            Route::get('/{id}/view', 'Admin\PersonalShopperController@view')->name('admin.personal-shopper.users.view');
+
+            // Route::post('/store', 'Admin\CommissionController@store')->name('admin.commissions.store');
+            // Route::get('/{id}/edit', 'Admin\CommissionController@edit')->name('admin.commissions.edit');
+            // Route::post('/update', 'Admin\CommissionController@update')->name('admin.commissions.update');
+            // Route::post('/status', 'Admin\CommissionController@status')->name('admin.commissions.status');
+
+        });
+
+        Route::group(['prefix'  =>   'personal-shopper/commissions'], function() {
+
+            Route::get('', 'Admin\PersonalShopperController@commissions')->name('admin.personal-shopper.commissions.index');
+
+        });
+
+        Route::group(['prefix'  =>   'agent/commissions'], function() {
+
+            Route::get('', 'Admin\AgentController@commissions')->name('admin.agent.commissions.index');
+
+        });
+
 
 
         Route::group(['prefix'  =>   'users'], function() {
@@ -128,6 +170,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::group(['prefix' => 'orders'], function () {
             Route::get('/', 'Admin\OrderController@index')->name('admin.orders.index');
             Route::get('/{order}/show', 'Admin\OrderController@show')->name('admin.orders.show');
+        });
+
+        Route::group(['prefix' => 'payments'], function () {
+            Route::get('/', 'Admin\PaymentController@index')->name('admin.payments.index');
+
         });
     });
 });

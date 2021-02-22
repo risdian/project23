@@ -335,10 +335,10 @@ class ReportController extends Controller
         if($commission != null){
 
             $comission_attributes = $commission->attributes()
-                ->where('range_end', '>=', $total_sale)
+                ->where('max', '>=', $total_sale)
                 ->first();
 
-            $total_commission = ($comission_attributes->price / 100) * $total_sale;
+            $total_commission = ($comission_attributes->value / 100) * $total_sale;
 
             $list_commission = DB::table('order_product')
             ->join('products', 'order_product.product_id', '=', 'products.id')
@@ -355,7 +355,7 @@ class ReportController extends Controller
                     DB::raw('DATE(orders.updated_at) AS date'),
                     DB::raw('COUNT(*) as count'),
                     DB::raw('SUM(order_product.price * order_product.quantity) as sale'),
-                    DB::raw('SUM( ('.$comission_attributes->price.'/ 100) * (order_product.price * order_product.quantity) ) as commission')
+                    DB::raw('SUM( ('.$comission_attributes->value.'/ 100) * (order_product.price * order_product.quantity) ) as commission')
                 )
             );
 
@@ -415,10 +415,10 @@ class ReportController extends Controller
         if($commission != null){
 
             $comission_attributes = $commission->attributes()
-            ->where('range_end', '>=', $total_sale)
+            ->where('max', '>=', $total_sale)
             ->first();
 
-            $total_commission = ($comission_attributes->price / 100) * $total_sale;
+            $total_commission = ($comission_attributes->value / 100) * $total_sale;
 
             $list_commission = DB::table('order_product')
             ->join('products', 'order_product.product_id', '=', 'products.id')
@@ -435,7 +435,7 @@ class ReportController extends Controller
                     DB::raw('DATE(orders.updated_at) AS date'),
                     DB::raw('COUNT(*) as count'),
                     DB::raw('SUM(order_product.price * order_product.quantity) as sale'),
-                    DB::raw('SUM( ('.$comission_attributes->price.'/ 100) * (order_product.price * order_product.quantity) ) as commission')
+                    DB::raw('SUM( ('.$comission_attributes->value.'/ 100) * (order_product.price * order_product.quantity) ) as commission')
                 )
             );
 

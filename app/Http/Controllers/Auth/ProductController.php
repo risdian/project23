@@ -138,7 +138,6 @@ class ProductController extends BaseController
 
     public function edit($id)
     {
-        // $product = $this->productRepository->findProductById($id);
 
         $product = Product::with('images', 'branch')->findOrFail($id);
 
@@ -146,26 +145,8 @@ class ProductController extends BaseController
 
     }
 
-    public function update(Request $request)
+    public function update(StoreProductFormRequest $request)
     {
-
-        $this->validate($request, [
-            'name'              =>  'required',
-            'detail_image'      =>  'mimes:jpg,jpeg,png',
-            'sku'               =>  'required',
-            'branch_id'         =>  'required|not_in:0',
-            'categories'        =>  'required|not_in:0',
-            'price'             =>  'required|regex:/^\d+(\.\d{1,2})?$/',
-            'sale_price'        =>  'regex:/^\d+(\.\d{1,2})?$/',
-            'quantity'          =>  'required|integer',
-            'weight'            =>  'regex:/^\d+(\.\d{1,2})?$/',
-            'width'             =>  'regex:/^\d+(\.\d{1,2})?$/',
-            'length'            =>  'regex:/^\d+(\.\d{1,2})?$/',
-            'height'            =>  'regex:/^\d+(\.\d{1,2})?$/',
-        ]);
-
-        // return $request->all();
-
 
         $params = $request->except('_token');
 

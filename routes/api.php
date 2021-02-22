@@ -98,12 +98,35 @@ Route::group([
         });
 
         Route::group(['prefix'  =>   'orders'], function() {
+            Route::group(['prefix'  =>   'sale-expert'], function() {
+
+                Route::get('', 'Auth\OrderController@sale_expert');
+                Route::get('/search', 'Auth\OrderController@sale_expert_search');
+                Route::get('/search/agent', 'Auth\OrderController@sale_expert_search_agent');
+
+            });
+
+            Route::group(['prefix' => 'personal-shopper'], function(){
+                Route::get('', 'Auth\OrderController@personal_shopper');
+                Route::get('/search', 'Auth\OrderController@personal_shopper_search');
+                Route::get('/search/agent', 'Auth\OrderController@personal_shopper_search_agent');
+            });
+
+            Route::group(['prefix' => 'agent'], function(){
+                Route::get('', 'Auth\OrderController@agent');
+                Route::get('/search', 'Auth\OrderController@agent_search');
+            });
 
             Route::get('', 'Auth\OrderController@index');
+            Route::get('/sale-expert', 'Auth\OrderController@sale_expert');
+            Route::get('/sale-expert/search', 'Auth\OrderController@sale_expert_search');
+
+
             Route::get('/create', 'Auth\OrderController@create');
             Route::post('/store', 'Auth\OrderController@store');
             Route::get('/{id}/edit', 'Auth\OrderController@edit');
             Route::get('/{id}/view', 'Auth\OrderController@view');
+            Route::get('/{id}/sale-expert', 'Auth\OrderController@view_sale_expert');
             Route::get('/{id}/products', 'Auth\OrderController@products');
             Route::post('/payment', 'Auth\OrderController@payment');
 
@@ -203,6 +226,14 @@ Route::group([
             Route::get('/orders', 'Auth\SearchController@order');
             Route::get('/items', 'Auth\SearchController@item');
             Route::get('/invitations', 'Auth\SearchController@invite');
+
+        });
+
+        Route::group(['prefix'  =>   'balance'], function() {
+
+            Route::get('', 'Auth\BalanceController@index');
+            Route::get('/personal-shopper', 'Auth\BalanceController@personal_shopper');
+            Route::get('/agent', 'Auth\BalanceController@agent');
 
         });
 

@@ -90,7 +90,7 @@ class SettingsTableSeeder extends Seeder
             'value'                     =>  '',
         ],
         [
-            'key'                       =>  'toyyibpay_client_id',
+            'key'                       =>  'toyyibpay_category_id',
             'value'                     =>  '',
         ],
         [
@@ -112,6 +112,18 @@ class SettingsTableSeeder extends Seeder
         [
             'key'                       =>  'tax_value',
             'value'                     =>  '6',
+        ],
+        [
+            'key'                       =>  'personal_shopper_commission',
+            'value'                     =>  '10',
+        ],
+        [
+            'key'                       =>  'personal_shopper_agent_commission',
+            'value'                     =>  '2',
+        ],
+        [
+            'key'                       =>  'agent_commission',
+            'value'                     =>  '8',
         ],
     ];
 

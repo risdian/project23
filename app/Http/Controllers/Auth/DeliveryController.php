@@ -147,7 +147,7 @@ class DeliveryController extends Controller
             with(
                 array(
                     'products' => function($query) use ($branch_id) {
-                        $query->where('branch_id', $branch_id);
+                        $query->where('branch_id', $branch_id)->where('user_id', Auth()->user()->id);
                     },
                     'products.images',
             ))

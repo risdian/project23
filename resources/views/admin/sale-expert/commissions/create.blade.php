@@ -13,17 +13,15 @@
                 <h3 class="tile-title">{{ $subTitle }}</h3>
                 <form action="#" method="POST" role="form" enctype="multipart/form-data" id="dynamic_form">
                     @csrf
-
                     <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter Name" id="name">
+                        <label class="control-label" for="start">Start Month <span class="m-l-5 text-danger"> *</span></label>
+                        <input type="month" name="start" class="form-control" id="start">
                      </div>
-
                     <table class="table table-bordered" id="dynamic_field">
-                        <tr id="row.1">
+                        <tr >
                              <td>
-                                 <input type="text" name="price[]" placeholder="Enter price" class="form-control price_list" />
-                                 <div class="alert-message " id="price.0"></div>
+                                 <input type="text" name="value[]" placeholder="Enter value" class="form-control value_list" />
+                                 <div class="alert-message " id="value.0"></div>
                             </td>
                              <td>
                                  <input type="text" name="min[]" placeholder="Enter Mininmum" class="form-control min_list" />
@@ -39,7 +37,7 @@
                     <div class="tile-footer">
                         <button class="btn btn-primary" type="submit" name="save" id="save"><i class="fa fa-fw fa-lg fa-check-circle"></i>Save Commission</button>
                         &nbsp;&nbsp;&nbsp;
-                        <a class="btn btn-secondary" href="{{ route('admin.commissions.index') }}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('admin.sale-expert.commissions.index') }}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
                     </div>
                 </form>
             </div>
@@ -48,7 +46,6 @@
     <script src="{{ asset('backend/js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('backend/js/popper.min.js')}}"></script>
     <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('backend/js/main.js') }}"></script>
     <script>
         $(document).ready(function(){
 
@@ -62,7 +59,7 @@
              var i=0;
              $('#add').click(function(){
                   i++;
-                  $('#dynamic_field').append('<tr id="row.'+i+'"><td><input type="text" name="price[]" placeholder="Enter price" class="form-control price_list" /> <div class="alert-message " id="price.'+i+'"></div></td><td><input type="text" name="min[]" placeholder="Enter Mininmum" class="form-control min_list" /> <div class="alert-message " id="min.'+i+'"></td><td><input type="text" name="max[]" placeholder="Enter Maximum" class="form-control max_list" /> <div class="alert-message " id="max.'+i+'"></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');
+                  $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="value[]" placeholder="Enter value" class="form-control value_list" /> <div class="alert-message " id="value.'+i+'"></div></td><td><input type="text" name="min[]" placeholder="Enter Mininmum" class="form-control min_list" /> <div class="alert-message " id="min.'+i+'"></td><td><input type="text" name="max[]" placeholder="Enter Maximum" class="form-control max_list" /> <div class="alert-message " id="max.'+i+'"></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');
              });
              $(document).on('click', '.btn_remove', function(){
                   var button_id = $(this).attr("id");
@@ -74,16 +71,16 @@
                 let form_data = $("#dynamic_form").serialize()
                 $.ajax({
 
-                    url:'{{ route("admin.commissions.store") }}',
+                    url:'{{ route("admin.sale-expert.commissions.store") }}',
                     method:'post',
                     data : form_data,
                     dataType:'json',
                     beforeSend:function(){
                         $('#save').attr('disabled','disabled');
                     },
-                    success:function(data)
+                    success:function(response)
                     {
-
+                        window.location=response.url;
                         $('#save').attr('disabled', false);
 
                     },

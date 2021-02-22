@@ -12,8 +12,10 @@ class ToyyibPayService {
 
     public function __construct()
     {
-        if (config('settings.toyyibpay_secret_id') == '' || config('settings.toyyibpay_client_id') == '') {
+        if (config('settings.toyyibpay_secret_id') == '' || config('settings.toyyibpay_category_id') == '') {
+
             return redirect()->back()->with('error', 'No ToyyibPay settings found.');
+
         }
 
     }
@@ -24,8 +26,8 @@ class ToyyibPayService {
 
         $grand_total = $orders->grand_total * 100;
         $option = [
-            'userSecretKey' => 'kvdo9x8y-799s-d5yn-3ugb-c860ubvakzx9',
-            'categoryCode' => '1bynfwel',
+            'userSecretKey' => config('settings.toyyibpay_secret_id'),
+            'categoryCode' => config('settings.toyyibpay_category_id'),
             'billName' =>  'Al-ikhlas personal shopper',
             'billDescription' => 'Al-ikhlas personal shopper',
             'billPriceSetting'=> 1,

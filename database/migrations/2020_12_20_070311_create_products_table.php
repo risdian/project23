@@ -24,8 +24,8 @@ class CreateProductsTable extends Migration
             $table->string('detail_image')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('quantity');
-            $table->decimal('price', 8, 2)->nullable();
-            $table->decimal('sale_price', 8, 2)->nullable();
+            $table->decimal('price', 20, 2)->nullable();
+            $table->decimal('sale_price', 20, 2)->nullable();
 
             $table->decimal('weight', 8, 2)->nullable();
             $table->decimal('length', 8, 2)->nullable();

@@ -106,7 +106,7 @@ class SearchController extends Controller
 
                 $query->where('state', 'like', '%'.$search.'%')->where('parent_id', Auth()->user()->id);
             })
-            ->get();
+            ->orderBy('updated_at', 'DESC')->get();
 
 
         return response()->json($orders);

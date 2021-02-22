@@ -81,7 +81,7 @@ class DashboardController extends Controller
 
 
                 $comission_attributes = $commission->attributes()
-                ->where('range_end', '>=', $total_sale)
+                ->where('max', '>=', $total_sale)
                 ->first();
 
                 $total_commission = ($comission_attributes->price / 100) * $total_sale;

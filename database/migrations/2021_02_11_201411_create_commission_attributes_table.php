@@ -16,9 +16,9 @@ class CreateCommissionAttributesTable extends Migration
         Schema::create('commission_attributes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('commission_id');
-            $table->decimal('price', 8, 2)->nullable();
-            $table->decimal('range_start', 8, 2)->nullable();
-            $table->decimal('range_end', 8, 2)->nullable();
+            $table->decimal('value', 25, 2)->nullable();
+            $table->decimal('min', 25, 2)->nullable();
+            $table->decimal('max', 25, 2)->nullable();
             $table->timestamps();
         });
     }

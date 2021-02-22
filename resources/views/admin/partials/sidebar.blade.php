@@ -53,22 +53,59 @@
             </a>
         </li>
         <li>
-            <a class="app-menu__item {{ Route::currentRouteName() == 'admin.commissions.index' ? 'active' : '' }}" href="{{ route('admin.commissions.index') }}">
-                <i class="app-menu__icon fa fa-cogs"></i>
-                <span class="app-menu__label">Commissions</span>
-            </a>
-        </li>
-        <li>
             <a class="app-menu__item {{ Route::currentRouteName() == 'admin.settings' ? 'active' : '' }}" href="{{ route('admin.settings') }}">
                 <i class="app-menu__icon fa fa-cogs"></i>
                 <span class="app-menu__label">Settings</span>
             </a>
         </li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Tables</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Sale Expert</span><i class="treeview-indicator fa fa-angle-right"></i></a>
             <ul class="treeview-menu">
-              <li><a class="treeview-item" href="table-basic.html"><i class="icon fa fa-circle-o"></i> Basic Tables</a></li>
-              <li><a class="treeview-item" href="table-data-table.html"><i class="icon fa fa-circle-o"></i> Data Tables</a></li>
+              <li>
+                <a class="app-menu__item {{ Route::currentRouteName() == 'admin.sale-expert.commissions.index' ? 'active' : '' }}" href="{{ route('admin.sale-expert.commissions.index') }}">
+                    <i class="app-menu__icon fa fa-cogs"></i>
+                    <span class="app-menu__label">Commissions</span>
+                </a>
+              </li>
+              <li>
+                <a class="app-menu__item {{ Route::currentRouteName() == 'admin.sale-expert.users.index' ? 'active' : '' }}" href="{{ route('admin.sale-expert.users.index') }}">
+                    <i class="app-menu__icon fa fa-cogs"></i>
+                    <span class="app-menu__label">Users</span>
+                </a>
+              </li>
             </ul>
-          </li>
+        </li>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Personal Shopper</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+            <ul class="treeview-menu">
+              <li>
+                <a class="app-menu__item {{ Route::currentRouteName() == 'admin.personal-shopper.commissions.index' ? 'active' : '' }}" href="{{ route('admin.personal-shopper.commissions.index') }}">
+                    <i class="app-menu__icon fa fa-cogs"></i>
+                    <span class="app-menu__label">Commissions</span>
+                </a>
+              </li>
+              <li>
+                <a class="app-menu__item {{ Route::currentRouteName() == 'admin.personal-shopper.users.index' ? 'active' : '' }}" href="{{ route('admin.personal-shopper.users.index') }}">
+                    <i class="app-menu__icon fa fa-cogs"></i>
+                    <span class="app-menu__label">Users</span>
+                </a>
+              </li>
+            </ul>
+        </li>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Agent</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+            <ul class="treeview-menu">
+              <li>
+                <a class="app-menu__item {{ Route::currentRouteName() == 'admin.agent.commissions.index' ? 'active' : '' }}" href="{{ route('admin.agent.commissions.index') }}">
+                    <i class="app-menu__icon fa fa-cogs"></i>
+                    <span class="app-menu__label">Commissions</span>
+                </a>
+              </li>
+            </ul>
+        </li>
+        {{-- <li>
+            <a class="app-menu__item {{ Route::currentRouteName() == 'admin.withdrawals.index' ? 'active' : '' }}" href="{{ route('admin.withdrawals.index') }}">
+                <i class="app-menu__icon fa fa-bar-chart"></i>
+                <span class="app-menu__label">Payment claim</span>
+            </a>
+
+        </li> --}}
     </ul>
 </aside>

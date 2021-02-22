@@ -25,12 +25,11 @@ class StoreProductFormRequest extends FormRequest
     {
         return [
             'name'              =>  'required',
-            'detail_image'      =>  'mimes:jpg,jpeg,png',
             'sku'               =>  'required',
             'branch_id'         =>  'required|not_in:0',
             'categories'        =>  'required|not_in:0',
             'price'             =>  'required|regex:/^\d+(\.\d{1,2})?$/',
-            'sale_price'        =>  'regex:/^\d+(\.\d{1,2})?$/',
+            'sale_price'        =>  'regex:/^\d+(\.\d{1,2})?$/|lt:price',
             'quantity'          =>  'required|integer',
             'weight'            =>  'regex:/^\d+(\.\d{1,2})?$/',
             'width'             =>  'regex:/^\d+(\.\d{1,2})?$/',

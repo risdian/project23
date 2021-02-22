@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Site;
 
-use DB;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BaseController;
 
@@ -44,7 +44,7 @@ class OrderController extends BaseController
                  ->where('orders.id', $order->id)
                  ->where('orders.payment_status', '1')
                  ->groupBy(['orders.order_number', 'products.branch_id'])
-                 ->select('orders.id','products.branch_id','orders.order_number', DB::raw('count(order_product.product_id) as item'), 'orders.name', 'orders.phone_number', 'orders.address', 'orders.city','orders.state','orders.country', 'orders.postcode', 'branches.name as branch')
+                 ->select('orders.id','products.branch_id','orders.order_number', DB::raw('count(order_product.product_id) as item'), 'orders.name', 'orders.phone_number', 'orders.address', 'orders.city','orders.state','orders.country', 'orders.postcode', 'branches.name as branch', 'branches.id as branch_id')
              ->get();
 
 

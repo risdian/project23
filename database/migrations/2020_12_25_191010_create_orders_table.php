@@ -21,9 +21,9 @@ class CreateOrdersTable extends Migration
 
             $table->enum('status', ['pending', 'processing', 'completed', 'decline'])->default('pending');
 
-            $table->decimal('grand_total', 8, 2);
-            $table->decimal('sub_total', 8, 2);
-            $table->decimal('tax', 8, 2);
+            $table->decimal('grand_total', 20, 2);
+            $table->decimal('sub_total', 20, 2);
+            $table->decimal('tax', 20, 2);
 
             $table->unsignedInteger('item_count');
 
