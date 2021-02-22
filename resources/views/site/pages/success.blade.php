@@ -95,7 +95,7 @@
                             <dd class="col-sm-2 text-right"><strong class="h5 text-dark">{{ config('settings.currency_symbol'). number_format((float)$order->grand_total, 2, '.', '')}}</strong></dd>
                             </dl>
                             @if($order->payment_status != 1)
-                            <a href="https://dev.toyyibpay.com/{{$order->payment_code}}" class="btn btn-primary btn-block"> Make Purchase </a>
+                            <a href="https://toyyibpay.com/{{$order->payment_code}}" class="btn btn-primary btn-block"> Make Purchase </a>
                             @endif
 
                         </article> <!-- card-body.// -->

@@ -38,7 +38,7 @@
                         </figure>
                     </div> <!-- col.// -->
                     @endforeach
-                    <a href="https://dev.toyyibpay.com/{{$order->payment_code}}" class="btn btn-primary btn-block"> I have received the parcel </a>
+                    <a href="https://toyyibpay.com/{{$order->payment_code}}" class="btn btn-primary btn-block"> I have received the parcel </a>
 
                 </div> <!-- row.// -->
         </article> <!-- card-body.// -->
