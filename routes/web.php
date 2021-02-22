@@ -81,7 +81,7 @@ Route::get('/order/print/{branch}/{id}', 'Auth\DeliveryController@print');
 Route::group(['prefix'  =>   'orders'], function() {
 
 
-    Route::get('/{order_number}', 'Site\OrderController@index');
+    Route::get('/{order_number}', 'Site\OrderController@index')->name('orders.selamat');
 
     Route::get('/trackings/{order_number}', 'Site\Ordercontroller@tracking');
 

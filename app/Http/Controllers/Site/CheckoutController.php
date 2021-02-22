@@ -58,7 +58,7 @@ class CheckoutController extends BaseController
 
         $order->save();
 
-        return redirect()->route('order.complete',['order_number' => $order->order_number]);
+        return redirect()->route('orders.selamat',['order_number' => $order->order_number]);
     }
 
     public function order($order_number){
