@@ -29,7 +29,7 @@
             <div class="tab-content">
             <div class="tab-pane active" id="user-details">
                 <div class="tile user-details">
-                    <h4 class="line-head">Details</h4>
+                    {{-- <h4 class="line-head">Details</h4>
                     <div class="row">
                         <div class="col-md-8">
                             <label>Total Sale : {{ $total_sale }}</label>
@@ -62,63 +62,70 @@
                             @endforeach
 
                         </tbody>
-                    </table>
+                    </table> --}}
                 </div>
             </div>
             <div class="tab-pane" id="user-sale">
-                @foreach ($products as $product)
-                <div class="timeline-post">
-                    <div class="post-media">
-                        <div class="content">
-                            <h5><a href="#">{{ $product->order_number }}</a></h5>
-                            <p class="text-muted"><small>{{ $product->created_at }}</small></p>
-                            <address><strong>{{ $product->name }}</strong><br>{{ $product->address }}<br>{{ $product->city }}, {{ $product->state }}  {{ $product->country }} {{ $product->postcode }}<br>{{ $product->phone_number }}<br></address>
-                        </div>
-                    </div>
+                <div class="tile user-details">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                            <tr>
+                                <th> # </th>
+                                <th> Order No. </th>
+                                <th> Status </th>
+                                <th> Created At </th>
+                                <th style="width:100px; min-width:100px;" class="text-center text-danger"><i class="fa fa-bolt"> </i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td> {{ $order->id }} </td>
+                                    <td> {{ $order->order_number }} </td>
+                                    <td> {{ $order->status }} </td>
+                                    <td> {{ $order->created_at }} </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.personal-shopper.users.view', $order->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
                 </div>
-                @endforeach
-                {{ $products->links() }}
             </div>
             <div class="tab-pane fade" id="user-profile">
                 <div class="tile user-profile">
                 <h4 class="line-head">Profile</h4>
-                <form action="{{ route('admin.sale-expert.users.update') }}" method="POST" role="form" enctype="multipart/form-data">
-                    @csrf
+                <form>
                     <div class="row">
                         <div class="col-md-8 mb-4">
                             <label>Name</label>
-                            <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" id="name" value="{{ old('name', $sale_expert->name) }}"
-                            >
-                            <input type="hidden" name="id" value="{{ $sale_expert->id }}">
-                            @error('name') {{ $message }} @enderror
+                            <input class="form-control" type="text" value="{{ $agent->name }}">
                         </div>
                         <div class="col-md-8 mb-4">
                             <label>Email</label>
-                            <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" id="email" value="{{ old('email',$sale_expert->email) }}">
-                            @error('email') {{ $message }} @enderror
+                            <input class="form-control" type="email" value="{{ $agent->email }}">
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-8 mb-4">
                             <label>NRIC</label>
-                            <input class="form-control @error('nric') is-invalid @enderror" type="text" name="nric" id="nric" value="{{ old('nric',$sale_expert->nric) }}">
-                            @error('nric') {{ $message }} @enderror
-
+                            <input class="form-control" type="text" value="{{ $agent->nric }}">
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-8 mb-4">
                             <label>Mobile No</label>
-                            <input class="form-control @error('mobile') is-invalid @enderror" name="mobile" id="mobile" type="text" value="{{ old('mobile',$sale_expert->mobile) }}">
-                            @error('mobile') {{ $message }} @enderror
+                            <input class="form-control" type="text" value="{{ $agent->mobile }}">
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-8 mb-4">
                             <label>Parent</label>
-                            <input class="form-control" type="text" value="{{ $sale_expert->parent->name }}" disabled>
+                            <input class="form-control" type="text" value="{{ $agent->parent->name }}" disabled>
                         </div>
                     </div>
                     <div class="row mb-10">
                         <div class="col-md-12">
-                            {{-- <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Save User</button> --}}
+                            {{-- <button class="btn btn-primary" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i> Save</button> --}}
                         </div>
                     </div>
                 </form>
@@ -130,46 +137,9 @@
 
 
 @endsection
-
 @push('scripts')
     <script type="text/javascript" src="{{ asset('backend/js/plugins/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('backend/js/plugins/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">$('#sampleTable').DataTable();</script>
 
-    <!-- Essential javascripts for application to work-->
-    <script src="{{ asset('backend/js/jquery-3.3.1.min.js') }}"></script>
-    <script src="{{ asset('backend/js/popper.min.js')}}"></script>
-    <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
-    <!-- The javascript plugin to display page loading on top-->
-    <script src="{{ asset('backend/js/plugins/pace.min.js') }}"></script>
-    <!-- Page specific javascripts-->
-    <script type="text/javascript" src="{{ asset('backend/js/plugins/chart.js') }}"></script>
-    @if($list_commission != null)
-
-        <script type="text/javascript">
-        var data = {
-            labels: {!!json_encode($list_commission->pluck('date'))!!},
-            datasets: [
-                {
-                    label: "Sales",
-                    fillColor: "rgba(220,220,220,0.2)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: {!!json_encode($list_commission->pluck('sale'))!!}
-                },
-
-            ]
-        };
-
-        var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-        var lineChart = new Chart(ctxl).Line(data);
-
-        </script>
-
-    @endif
-
 @endpush
-

@@ -51,6 +51,7 @@ class DeliveryController extends Controller
             ->where('orders.user_id', Auth()->user()->id)
             ->where('orders.payment_status', '1')
             ->groupBy(['orders.order_number', 'products.branch_id'])
+            ->orderBy('created_at', 'DESC')
             ->select('orders.id','products.branch_id','orders.order_number', DB::raw('count(order_product.product_id) as item'), 'orders.name', 'orders.phone_number', 'orders.address', 'orders.city','orders.state','orders.country', 'orders.postcode', 'branches.name as branch')
         ->get();
 
@@ -135,7 +136,7 @@ class DeliveryController extends Controller
          ->where('orders.payment_status', '1')
          ->groupBy(['orders.order_number', 'products.branch_id'])
          ->select('orders.id','products.branch_id','orders.order_number', DB::raw('count(order_product.product_id) as item'), 'orders.name', 'orders.phone_number', 'orders.address', 'orders.city','orders.state','orders.country', 'orders.postcode', 'branches.name as branch')
-     ->get();
+        ->get();
 
      return response()->json($products);
 

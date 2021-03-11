@@ -23,9 +23,9 @@
                     </div>
                     <div class="tile-body">
                         <div class="form-group">
-                            <label class="control-label" for="country_code">Country Code <span class="m-l-5 text-danger"> *</span></label>
-                            <input class="form-control @error('country_code') is-invalid @enderror" type="text" name="country_code" id="country_code" value="{{ old('country_code', $user->country_code) }}"/>
-                            @error('country_code') {{ $message }} @enderror
+                            <label class="control-label" for="nric">Nric <span class="m-l-5 text-danger"> *</span></label>
+                            <input class="form-control @error('nric') is-invalid @enderror" type="text" name="nric" id="mobile" value="{{ old('nric', $user->nric) }}"/>
+                            @error('nric') {{ $message }} @enderror
                         </div>
                     </div>
                     <div class="tile-body">
@@ -41,6 +41,16 @@
                             <input class="form-control @error('email') is-invalid @enderror" type="text" name="email" id="email" value="{{ old('email', $user->email) }}"/>
                             @error('email') {{ $message }} @enderror
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Role</label>
+                        <select id="roles" class="form-control custom-select mt-15 @error('roles') is-invalid @enderror" name="roles">
+                            <option value="0">Select a Roles</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}" @if (old('roles', $userRole) == $role->id)
+                                    selected  @endif> {{ $role->name }} </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="tile-footer">
                         <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Save User</button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Site;
 
+use Carbon\Carbon;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
@@ -29,12 +30,10 @@ class OrderController extends BaseController
 
 
         if($order->payment_status == 1 ) {
-            $payment = 'Paid';
+            $payment = 'Successful';
         } else {
             $payment ='Pending';
         }
-
-        $products = $order->products;
 
                  //relation antara product dan order
         $trackings = DB::table('order_product')
@@ -47,8 +46,19 @@ class OrderController extends BaseController
                  ->select('orders.id','products.branch_id','orders.order_number', DB::raw('count(order_product.product_id) as item'), 'orders.name', 'orders.phone_number', 'orders.address', 'orders.city','orders.state','orders.country', 'orders.postcode', 'branches.name as branch', 'branches.id as branch_id')
              ->get();
 
+        $sni = Order::find($order->id);
 
-        return view('site.pages.order.show', compact('order', 'products', 'payment', 'trackings'));
+
+        $result = collect($sni->products()->with('images','branch', 'category')->get())
+
+            ->groupBy('branch.name')
+            ->toArray();
+
+        // return $result;
+
+
+
+        return view('site.pages.order.show', compact('order', 'payment', 'trackings', 'result'));
 
     }
 
@@ -62,8 +72,37 @@ class OrderController extends BaseController
         ->where('orders.payment_status', '1')
         ->groupBy(['orders.order_number', 'products.branch_id'])
         ->select('orders.id','products.branch_id','orders.order_number', DB::raw('count(order_product.product_id) as item'), 'orders.name', 'orders.phone_number', 'orders.address', 'orders.city','orders.state','orders.country', 'orders.postcode', 'branches.name as branch')
-    ->get();
+        ->get();
 
         return $trackings;
+    }
+
+    public function update_tracking(Request $request){
+
+
+        $branch_id = $request->branch_id;
+
+        $order = Order::
+            with(
+                array(
+                    'products' => function($query) use ($branch_id) {
+                        $query->where('branch_id', $branch_id);
+                    },
+                    'products.images',
+
+            ))->find($request->id);
+
+        foreach($order['products'] as $products){
+
+            $order = DB::update('update order_product set tracking_status = ?, tracking_datetime=? where order_id = ? and product_id = ?',[
+                $request->tracking_number,
+                Carbon::now(),
+                $request->id,
+                $products->id,
+            ]);
+
+        }
+
+
     }
 }

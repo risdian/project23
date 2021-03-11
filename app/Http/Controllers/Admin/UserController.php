@@ -9,6 +9,8 @@ use App\Exports\UsersExport;
 use Illuminate\Http\Request;
 use App\Mail\InvitationEmail;
 use App\Services\ToyyibPayService;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -34,8 +36,12 @@ class UserController extends BaseController
 
     public function create(){
 
+
+        $roles = Role::all();
+
         $this->setPageTitle('Users', 'Create User');
-        return view('admin.users.create');
+
+        return view('admin.users.create', compact('roles'));
 
     }
 
@@ -43,33 +49,34 @@ class UserController extends BaseController
 
         $this->validate($request, [
             'name'          =>  'required|max:191',
-            'country_code'  =>  'required',
-            'mobile'        =>  'required',
-            'email'         => 'required|string|email|unique:users',
+            'nric'          =>  'required|regex:/^\d{6}-\d{2}-\d{4}$/|unique:users',
+            'mobile'        =>  'required|regex:/^(\+?6?01)[0-46-9]-*[0-9]{7,8}$/|unique:users',
+            'email'         =>  'required|string|email|max:255|unique:users',
+            'roles'         =>  'required',
         ]);
 
         $user = new User;
 
         $user->name = $request->name;
-        $user->country_code = $request->country_code;
+        $user->nric = $request->nric;
         $user->mobile = $request->mobile;
         $user->email = $request->email;
-        $user->password = bcrypt('password');
+        $user->password = bcrypt('Smsgvs32!@#$');
         $user->status = 'sale_expert';
+
         $user->save();
 
-        // $this->toyyibPay->processPayment($user);
+        $user->assignRole($request->input('roles'));
 
-        // $token = app(\Illuminate\Auth\Passwords\PasswordBroker::class)->createToken($user);
+        $token = app(\Illuminate\Auth\Passwords\PasswordBroker::class)->createToken($user);
 
+        Mail::to($user->email)
+            ->send(new Contact($user->name, $token, $user->email));
 
-        // Mail::to($user->email)
-        //     ->send(new Contact($user->name, $token, $user->email));
-
-        // if (!$user) {
-        //     return $this->responseRedirectBack('Error occurred while creating user.', 'error', true, true);
-        // }
-        // return $this->responseRedirect('admin.users.index', 'User added successfully' ,'success',false, false);
+        if (!$user) {
+            return $this->responseRedirectBack('Error occurred while creating user.', 'error', true, true);
+        }
+        return $this->responseRedirect('admin.users.index', 'User added successfully' ,'success',false, false);
 
     }
 
@@ -87,10 +94,11 @@ class UserController extends BaseController
 
     public function edit($id){
 
+        $roles = Role::all();
         $user = User::findorFail($id);
-
+        $userRole = $user->roles->pluck('id')->first();
         $this->setPageTitle('Users', 'Edit User : '.$user->name);
-        return view('admin.users.edit', compact('user'));
+        return view('admin.users.edit', compact('user', 'roles', 'userRole'));
 
     }
 
@@ -98,20 +106,24 @@ class UserController extends BaseController
 
         $this->validate($request, [
             'name'          =>  'required|max:191',
-            'country_code'  =>  'required',
-            'mobile'        =>  'required',
+            'nric'          =>  'required|regex:/^\d{6}-\d{2}-\d{4}$/|unique:users,nric,'.$request->id,
+            'mobile'        =>  'required|regex:/^(\+?6?01)[0-46-9]-*[0-9]{7,8}$/|unique:users,mobile,'.$request->id,
             'email'         =>  'required|string|email|max:255|unique:users,email,'.$request->id,
+            'roles'         =>  'required',
         ]);
 
         $user = User::findorFail($request->id);
 
-        // return $user;
-
         $user->name = $request->name;
-        $user->country_code = $request->country_code;
+        $user->nric = $request->nric;
         $user->mobile = $request->mobile;
         $user->email = $request->email;
+
         $user->save();
+
+        DB::table('model_has_roles')->where('model_id',$request->id)->delete();
+
+        $user->assignRole($request->input('roles'));
 
         if (!$user) {
             return $this->responseRedirectBack('Error occurred while update user.', 'error', true, true);

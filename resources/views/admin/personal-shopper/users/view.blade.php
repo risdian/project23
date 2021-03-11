@@ -125,7 +125,7 @@
                     </div>
                     <div class="row mb-10">
                         <div class="col-md-12">
-                            <button class="btn btn-primary" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i> Save</button>
+                            {{-- <button class="btn btn-primary" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i> Save</button> --}}
                         </div>
                     </div>
                 </form>

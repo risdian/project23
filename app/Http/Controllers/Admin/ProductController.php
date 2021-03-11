@@ -32,6 +32,11 @@ class ProductController extends BaseController
         $this->brandRepository = $brandRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
+
+        $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:product-create', ['only' => ['create','store']]);
+        $this->middleware('permission:product-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
     }
 
     public function index()
@@ -46,9 +51,10 @@ class ProductController extends BaseController
     {
         $branches = $this->branchRepository->listBranches('name', 'asc');
         $categories = $this->categoryRepository->listCategories('name', 'asc');
+        $brands = $this->brandRepository->listBrands('name', 'asc');
 
         $this->setPageTitle('Products', 'Create Product');
-        return view('admin.products.create', compact('categories', 'branches'));
+        return view('admin.products.create', compact('categories', 'branches', 'brands'));
     }
 
     public function store(StoreProductFormRequest $request)
@@ -69,9 +75,10 @@ class ProductController extends BaseController
         $product = $this->productRepository->findProductById($id);
         $branches = $this->branchRepository->listBranches('name', 'asc');
         $categories = $this->categoryRepository->listCategories('name', 'asc');
+        $brands = $this->brandRepository->listBrands('name', 'asc');
 
         $this->setPageTitle('Products', 'Edit Product');
-        return view('admin.products.edit', compact('categories', 'branches', 'product'));
+        return view('admin.products.edit', compact('categories', 'branches', 'product', 'brands'));
     }
 
     public function update(StoreProductFormRequest $request)

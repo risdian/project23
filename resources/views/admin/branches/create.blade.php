@@ -20,6 +20,11 @@
                             @error('name') {{ $message }} @enderror
                         </div>
                         <div class="form-group">
+                            <label class="control-label" for="phone_number">Phone number <span class="m-l-5 text-danger"> *</span></label>
+                            <input class="form-control @error('phone_number') is-invalid @enderror" type="text" name="phone_number" id="phone_number" value="{{ old('phone_number') }}"/>
+                            @error('phone_number') {{ $message }} @enderror
+                        </div>
+                        <div class="form-group">
                             <label class="control-label" for="address">Address <span class="m-l-5 text-danger"> *</span></label>
                             <input class="form-control @error('address') is-invalid @enderror" type="text" name="address" id="address" value="{{ old('address') }}"/>
                             @error('address') {{ $message }} @enderror

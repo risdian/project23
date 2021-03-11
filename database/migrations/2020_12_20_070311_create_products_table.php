@@ -16,15 +16,15 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('branch_id')->index();
-            $table->string('categories')->index();
+            $table->unsignedBigInteger('branch_id')->index();
+            $table->unsignedBigInteger('brand_id')->index();
+            $table->unsignedBigInteger('categories')->index();
             $table->string('sku');
             $table->string('name');
             $table->string('slug');
-            $table->string('detail_image')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('quantity');
-            $table->decimal('price', 20, 2)->nullable();
+            $table->decimal('price', 20, 2);
             $table->decimal('sale_price', 20, 2)->nullable();
 
             $table->decimal('weight', 8, 2)->nullable();
@@ -38,8 +38,9 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('counter')->default(0);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->foreign('branch_id')->references('id')->on('branchs')->onDelete('cascade');
-            // $table->foreign('categories')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreign('categories')->references('id')->on('categories')->onDelete('cascade');
 
             $table->timestamps();
         });

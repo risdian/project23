@@ -38,11 +38,6 @@
                                         <i class="fa fa-exclamation-circle fa-fw"></i> @error('name') <span>{{ $message }}</span> @enderror
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label">Detail image</label>
-                                    <input class="form-control @error('detail_image') is-invalid @enderror" type="file" id="detail_image" name="detail_image"/>
-                                    @error('detail_image') {{ $message }} @enderror
-                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -66,7 +61,8 @@
                                             <select name="branch_id" id="branch_id" class="form-control @error('branch_id') is-invalid @enderror">
                                                 <option value="0">Select a branch</option>
                                                 @foreach($branches as $branch)
-                                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                                    <option value="{{ $branch->id }}"  @if (old('branch_id') == $branch->id)
+                                                        selected  @endif>{{ $branch->name }}</option>
                                                 @endforeach
                                             </select>
                                             <div class="invalid-feedback active">
@@ -76,13 +72,29 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label" for="categories">Category</label>
+                                            <label class="control-label" for="brand_id">Brand</label>
+                                            <select name="brand_id" id="brand_id" class="form-control @error('brand_id') is-invalid @enderror">
+                                                <option value="0">Select a brand</option>
+                                                @foreach($brands as $brand)
+                                                    <option value="{{ $brand->id }}"  @if (old('brand_id') == $brand->id)
+                                                        selected  @endif>{{ $brand->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback active">
+                                                <i class="fa fa-exclamation-circle fa-fw"></i> @error('brand_id') <span>{{ $message }}</span> @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="categories">Categories</label>
                                             <select name="categories" id="categories" class="form-control @error('categories') is-invalid @enderror">
-                                                <option value="0">Select a category</option>
+                                                <option value="0">Select a categories</option>
                                                 @foreach($categories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    <option value="{{ $category->id }}"  @if (old('categories') == $category->id)
+                                                        selected  @endif>{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                             <div class="invalid-feedback active">
@@ -117,7 +129,7 @@
                                                 placeholder="Enter product Sale price"
                                                 id="sale_price"
                                                 name="sale_price"
-                                                value="{{ old('sale_price') }}"
+                                                value="{{ old('sale_price', 0) }}"
                                             />
                                             <div class="invalid-feedback active">
                                                 <i class="fa fa-exclamation-circle fa-fw"></i> @error('sale_price') <span>{{ $message }}</span> @enderror
@@ -135,7 +147,7 @@
                                                 placeholder="Enter product quantity"
                                                 id="quantity"
                                                 name="quantity"
-                                                value="{{ old('quantity') }}"
+                                                value="{{ old('quantity', 1) }}"
                                             />
                                             <div class="invalid-feedback active">
                                                 <i class="fa fa-exclamation-circle fa-fw"></i> @error('quantity') <span>{{ $message }}</span> @enderror

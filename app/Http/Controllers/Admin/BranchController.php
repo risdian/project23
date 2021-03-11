@@ -44,12 +44,13 @@ class BranchController extends BaseController
     public function store(Request $request){
 
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'address'   =>  'required|max:191',
-            'postcode'  =>  'required|max:191',
-            'city'      =>  'required|max:191',
-            'state'     =>  'required|max:191',
-            'country'   =>  'required|max:191',
+            'name'          =>  'required|max:191',
+            'address'       =>  'required|max:191',
+            'phone_number'  =>  'required|max:191',
+            'postcode'      =>  'required|max:191',
+            'city'          =>  'required|max:191',
+            'state'         =>  'required|max:191',
+            'country'       =>  'required|max:191',
 
         ]);
 
@@ -72,7 +73,7 @@ class BranchController extends BaseController
     {
         $branch = $this->branchRepository->findBranchById($id);
 
-        $this->setPageTitle('Branch', 'Edit Brancj : '.$branch->name);
+        $this->setPageTitle('Branch', 'Edit Branch : '.$branch->name);
         return view('admin.branches.edit', compact('branch'));
     }
 
@@ -85,12 +86,13 @@ class BranchController extends BaseController
     {
 
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'address'   =>  'required|max:191',
-            'postcode'  =>  'required|max:191',
-            'city'      =>  'required|max:191',
-            'state'     =>  'required|max:191',
-            'country'   =>  'required|max:191',
+            'name'          =>  'required|max:191',
+            'address'       =>  'required|max:191',
+            'phone_number'  =>  'required|max:191',
+            'postcode'      =>  'required|max:191',
+            'city'          =>  'required|max:191',
+            'state'         =>  'required|max:191',
+            'country'       =>  'required|max:191',
 
         ]);
 

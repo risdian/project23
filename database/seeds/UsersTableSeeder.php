@@ -3,6 +3,8 @@
 use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UsersTableSeeder extends Seeder
 {
@@ -15,11 +17,11 @@ class UsersTableSeeder extends Seeder
     {
         // $faker = Faker::create();
 
-        User::create([
-            'name'          =>  'admin',
+        $user = User::create([
+            'name'          =>  'super admin',
             'country_code'  =>  '60',
             'mobile'        =>  '123456789',
-            'email'         =>  'admin@admin.com',
+            'email'         =>  'super_admin@admin.com',
             'password'      =>  bcrypt('password'),
             'status'        =>  'admin',
             'parent_id'     =>  '0',
@@ -54,5 +56,14 @@ class UsersTableSeeder extends Seeder
             'status'        =>  'personal_shopper_2',
             'parent_id'     =>  '3',
         ]);
+
+        $role = Role::create(['name' => 'Super Admin']);
+
+        $permissions = Permission::pluck('id','id')->all();
+
+        $role->syncPermissions($permissions);
+
+        $user->assignRole([$role->id]);
+
     }
 }

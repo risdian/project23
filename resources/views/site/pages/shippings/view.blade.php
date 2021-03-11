@@ -32,13 +32,32 @@
                             </div>
 
                             <figcaption class="info">
+                                <p>{{ $product->branch->name }}</p>
                                 <p>{{ $product->name }}</p>
                                 <span>{{ $product->pivot->quantity }} x {{ config('settings.currency_symbol'). number_format((float)$product->pivot->price, 2, '.', '')}} = Total: {{ config('settings.currency_symbol'). number_format((float)$product->pivot->price * $product->pivot->quantity, 2, '.', '')}} </span>
                             </figcaption>
                         </figure>
                     </div> <!-- col.// -->
                     @endforeach
-                    <a href="https://toyyibpay.com/{{$order->payment_code}}" class="btn btn-primary btn-block"> I have received the parcel </a>
+
+                    @if($order['products']['0']['pivot']['tracking_number'] != null)
+                        @if ($order['products']['0']['pivot']['tracking_status'] == 'received')
+
+                        <a class="btn btn-primary btn-block"> Thank you for your purchase
+                        </a>
+
+                        @else
+                            <a href="{{ route('site.shippings.update',  $order['products']['0']['pivot']['tracking_number'] ) }}" class="btn btn-primary btn-block"> I have received the parcel
+                            </a>
+                        @endif
+
+                    @else
+
+                        <a href="" class="btn btn-warning btn-block">Your parcel number is not active, please Contact your Personal Shopper </a>
+
+                    @endif
+
+
 
                 </div> <!-- row.// -->
         </article> <!-- card-body.// -->

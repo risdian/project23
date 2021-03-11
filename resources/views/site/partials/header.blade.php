@@ -22,16 +22,7 @@
                     </form>
                 </div>
                 <div class="col-lg-3 col-sm-6">
-                    {{-- <div class="widgets-wrap d-flex justify-content-end">
-                        <div class="widget-header">
-                            <a href="#" class="icontext">
-                                <div class="icon-wrap icon-xs bg2 round text-secondary"><i
-                                        class="fa fa-shopping-cart"></i></div>
-                                <div class="text-wrap">
-                                    <small>{{ $cartCount }} items</small>
-                                </div>
-                            </a>
-                        </div>
+                    <div class="widgets-wrap d-flex justify-content-end">
                         @guest
                             <div class="widget-header">
                                 <a href="{{ route('login') }}" class="ml-3 icontext">
@@ -42,7 +33,7 @@
                             <div class="widget-header">
                                 <a href="{{ route('register') }}" class="ml-3 icontext">
                                     <div class="icon-wrap icon-xs bg-success round text-white"><i class="fa fa-user"></i></div>
-                                    <div class="text-wrap"><span>Register</span></div>
+                                    <div class="text-wrap"><span>Personal Shopper</span></div>
                                 </a>
                             </div>
                         @else
@@ -66,7 +57,7 @@
                                 </li>
                             </ul>
                         @endguest
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>

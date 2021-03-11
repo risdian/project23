@@ -44,20 +44,6 @@
                                         <i class="fa fa-exclamation-circle fa-fw"></i> @error('name') <span>{{ $message }}</span> @enderror
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    @if ($product->detail_image != null)
-                                    <div class="col-md-2">
-                                        <figure class="mt-2" style="width: 80px; height: auto;">
-                                                <img src="{{ asset('storage/'.$product->detail_image) }}" id="detail_image" class="img-fluid" alt="img">
-                                        </figure>
-                                    </div>
-                                    @endif
-                                    <label class="control-label" for="detail_image">Detail image</label>
-                                    <input class="form-control @error('detail_image') is-invalid @enderror" type="file" id="detail_image" name="detail_image"/>
-                                    <div class="invalid-feedback active">
-                                        <i class="fa fa-exclamation-circle fa-fw"></i> @error('detail_image') <span>{{ $message }}</span> @enderror
-                                    </div>
-                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -81,11 +67,7 @@
                                             <select name="branch_id" id="branch_id" class="form-control @error('branch_id') is-invalid @enderror">
                                                 <option value="0">Select a branch</option>
                                                 @foreach($branches as $branch)
-                                                    @if ($product->branch_id == $branch->id)
-                                                        <option value="{{ $branch->id }}" selected>{{ $branch->name }}</option>
-                                                    @else
-                                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                                    @endif
+                                                        <option value="{{ $branch->id }}"  @if (old('branch_id', $product->branch_id) == $branch->id) selected  @endif>{{ $branch->name }}</option>
                                                 @endforeach
                                             </select>
                                             <div class="invalid-feedback active">
@@ -97,15 +79,29 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label" for="categories">Category</label>
+                                            <label class="control-label" for="brand_id">Brand</label>
+                                            <select name="brand_id" id="brand_id" class="form-control @error('brand_id') is-invalid @enderror">
+                                                <option value="0">Select a brand</option>
+                                                @foreach($brands as $brand)
+
+                                                        <option value="{{ $brand->id }}" @if (old('brand_id', $product->brand_id) == $brand->id)
+                                                            selected  @endif>{{ $brand->name }}</option>
+
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback active">
+                                                <i class="fa fa-exclamation-circle fa-fw"></i> @error('brand_id') <span>{{ $message }}</span> @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="categories">Categories</label>
                                             <select name="categories" id="categories" class="form-control @error('categories') is-invalid @enderror">
-                                                <option value="0">Select a category</option>
+                                                <option value="0">Select a categories</option>
                                                 @foreach($categories as $category)
-                                                    @if ($product->categories == $category->id)
-                                                        <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
-                                                    @else
-                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                                    @endif
+                                                    <option value="{{ $category->id }}"  @if (old('categories', $product->categories) == $category->id)
+                                                        selected  @endif>{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                             <div class="invalid-feedback active">
@@ -315,7 +311,7 @@
     <script type="text/javascript" src="{{ asset('backend/js/plugins/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('backend/js/plugins/dropzone.js') }}"></script>
     <script type="text/javascript" src="{{ asset('backend/js/plugins/bootstrap-notify.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('backend/js/app.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('backend/js/app.js') }}"></script> --}}
     <script>
         Dropzone.autoDiscover = false;
 

@@ -26,7 +26,7 @@ class ReportController extends Controller
         ->where('status', 'completed')
         ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
         ->groupBy('date')
-        ->orderBy('date', 'DESC') // or ASC
+        ->orderBy('date', 'ASC') // or ASC
         ->get(array(
             DB::raw('DATE(updated_at) AS date'),
             DB::raw('COUNT(*) as count'),
@@ -71,7 +71,7 @@ class ReportController extends Controller
         ->where('status', 'completed')
         ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
         ->groupBy('date')
-        ->orderBy('date', 'DESC') // or ASC
+        ->orderBy('date', 'ASC') // or ASC
         ->get(array(
             DB::raw('DATE(updated_at) AS date'),
             DB::raw('COUNT(*) as count'),
@@ -124,7 +124,7 @@ class ReportController extends Controller
         ->where('status', 'completed')
         ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
         ->groupBy('date')
-        ->orderBy('date', 'DESC') // or ASC
+        ->orderBy('date', 'ASC') // or ASC
         ->get(array(
             DB::raw('DATE(updated_at) AS date'),
             DB::raw('COUNT(*) as count'),
@@ -169,7 +169,7 @@ class ReportController extends Controller
         ->where('status', 'completed')
         ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
         ->groupBy('date')
-        ->orderBy('date', 'DESC') // or ASC
+        ->orderBy('date', 'ASC') // or ASC
         ->get(array(
             DB::raw('DATE(updated_at) AS date'),
             DB::raw('COUNT(*) as count'),
@@ -228,7 +228,7 @@ class ReportController extends Controller
         ->where('status', 'completed')
         ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
         ->groupBy('date')
-        ->orderBy('date', 'DESC') // or ASC
+        ->orderBy('date', 'ASC') // or ASC
         ->get(array(
             DB::raw('DATE(updated_at) AS date'),
             DB::raw('COUNT(*) as count'),
@@ -275,7 +275,7 @@ class ReportController extends Controller
         ->where('status', 'completed')
         ->whereBetween('updated_at',[$weekStartDate,$weekEndDate])
         ->groupBy('date')
-        ->orderBy('date', 'DESC') // or ASC
+        ->orderBy('date', 'ASC') // or ASC
         ->get(array(
             DB::raw('DATE(updated_at) AS date'),
             DB::raw('COUNT(*) as count'),

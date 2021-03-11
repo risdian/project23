@@ -20,6 +20,10 @@ class CategoryController extends BaseController
     public function __construct(CategoryContract $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->middleware('permission:category-list|category-create|category-edit|category-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:category-create', ['only' => ['create','store']]);
+        $this->middleware('permission:category-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:category-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -55,9 +59,11 @@ class CategoryController extends BaseController
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'parent_id' =>  'required|not_in:0',
-            'detail_image'     =>  'mimes:jpg,jpeg,png|max:1000'
+            'name'          =>  'required|max:191',
+            'parent_id'     =>  'required|not_in:0',
+            'title'         => 'required|max:191',
+            'subtitle'      => 'required|max:191',
+            'detail_image'  =>  'mimes:jpg,jpeg,png|max:1000'
         ]);
 
         $params = $request->except('_token');
@@ -93,9 +99,11 @@ class CategoryController extends BaseController
     public function update(Request $request)
     {
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'parent_id' =>  'required|not_in:0',
-            'image'     =>  'mimes:jpg,jpeg,png|max:1000'
+            'name'          =>  'required|max:191',
+            'parent_id'     =>  'required|not_in:0',
+            'title'         => 'required|max:191',
+            'subtitle'      => 'required|max:191',
+            'detail_image'  =>  'mimes:jpg,jpeg,png|max:1000'
         ]);
 
         $params = $request->except('_token');

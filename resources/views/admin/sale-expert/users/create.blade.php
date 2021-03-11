@@ -11,7 +11,7 @@
         <div class="col-md-8 mx-auto">
             <div class="tile">
                 <h3 class="tile-title">{{ $subTitle }}</h3>
-                <form action="{{ route('admin.users.store') }}" method="POST" role="form" enctype="multipart/form-data">
+                <form action="{{ route('admin.sale-expert.users.store') }}" method="POST" role="form" enctype="multipart/form-data">
                     @csrf
                     <div class="tile-body">
                         <div class="form-group">
@@ -20,8 +20,8 @@
                             @error('name') {{ $message }} @enderror
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Nric</label>
-                            <input class="form-control @error('nric') is-invalid @enderror" type="text" id="nric" name="nric"  value="{{ old('nric') }}"/>
+                            <label class="control-label">NRIC</label>
+                            <input class="form-control @error('nric') is-invalid @enderror" type="text" id="nric" name="nric" value="{{ old('nric') }}"/>
                             @error('nric') {{ $message }} @enderror
                         </div>
                         <div class="form-group">
@@ -34,21 +34,11 @@
                             <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{ old('email') }}"/>
                             @error('email') {{ $message }} @enderror
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">Role</label>
-                            <select id="roles" class="form-control custom-select mt-15 @error('roles') is-invalid @enderror" name="roles">
-                                <option value="0">Select a Roles</option>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" @if (old('roles') == $role->id)
-                                        selected  @endif> {{ $role->name }} </option>
-                                @endforeach
-                            </select>
-                        </div>
                     </div>
                     <div class="tile-footer">
                         <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Save User</button>
                         &nbsp;&nbsp;&nbsp;
-                        <a class="btn btn-secondary" href="{{ route('admin.users.index') }}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('admin.sale-expert.users.index') }}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
                     </div>
                 </form>
             </div>

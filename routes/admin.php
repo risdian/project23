@@ -15,6 +15,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/settings', 'Admin\SettingController@index')->name('admin.settings');
         Route::post('/settings', 'Admin\SettingController@update')->name('admin.settings.update');
 
+        Route::group(['prefix'  =>   'roles'], function() {
+
+            Route::get('', 'Admin\roleController@index')->name('admin.roles.index');
+            Route::get('/create', 'Admin\roleController@create')->name('admin.roles.create');
+            Route::post('/store', 'Admin\roleController@store')->name('admin.roles.store');
+            Route::get('/{id}/edit', 'Admin\roleController@edit')->name('admin.roles.edit');
+            Route::post('/update', 'Admin\roleController@update')->name('admin.roles.update');
+            Route::get('/{id}/delete', 'Admin\roleController@delete')->name('admin.roles.delete');
+        });
 
         Route::group(['prefix'  =>   'sale-expert/commissions'], function() {
 
@@ -33,9 +42,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/create', 'Admin\SaleExpertController@create')->name('admin.sale-expert.users.create');
             Route::get('/{id}/view', 'Admin\SaleExpertController@view')->name('admin.sale-expert.users.view');
 
-            // Route::post('/store', 'Admin\CommissionController@store')->name('admin.commissions.store');
+            Route::post('/store', 'Admin\SaleExpertController@store')->name('admin.sale-expert.users.store');
             // Route::get('/{id}/edit', 'Admin\CommissionController@edit')->name('admin.commissions.edit');
-            // Route::post('/update', 'Admin\CommissionController@update')->name('admin.commissions.update');
+            Route::post('/update', 'Admin\SaleExpertController@update')->name('admin.sale-expert.users.update');
             // Route::post('/status', 'Admin\CommissionController@status')->name('admin.commissions.status');
 
         });
@@ -53,9 +62,22 @@ Route::group(['middleware' => ['auth']], function () {
 
         });
 
+
         Route::group(['prefix'  =>   'personal-shopper/commissions'], function() {
 
             Route::get('', 'Admin\PersonalShopperController@commissions')->name('admin.personal-shopper.commissions.index');
+
+        });
+
+        Route::group(['prefix'  =>   'agent/users'], function() {
+
+            Route::get('', 'Admin\AgentController@index')->name('admin.agent.users.index');
+            Route::get('/{id}/view', 'Admin\AgentController@view')->name('admin.agent.users.view');
+
+            // Route::post('/store', 'Admin\CommissionController@store')->name('admin.commissions.store');
+            // Route::get('/{id}/edit', 'Admin\CommissionController@edit')->name('admin.commissions.edit');
+            // Route::post('/update', 'Admin\CommissionController@update')->name('admin.commissions.update');
+            // Route::post('/status', 'Admin\CommissionController@status')->name('admin.commissions.status');
 
         });
 

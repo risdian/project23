@@ -93,9 +93,10 @@ Route::group(['prefix'  =>   'shippings'], function() {
 
     Route::get('/{branch_id}/{order_number}', 'Site\ShippingController@index')->name('site.shippings.view');
 
-    Route::post('update/{branch_id}/{order_number}', 'Site\ShippingController@update')->name('site.shippings.update');
+    Route::get('/{tracking_number}/{order_id}/track', 'Site\ShippingController@update')->name('site.shippings.update');
 
 });
+
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/checkout', 'Site\CheckoutController@getCheckout')->name('checkout.index');
@@ -105,4 +106,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('account/orders', 'Site\AccountController@getOrders')->name('account.orders');
 
 });
+
+
 

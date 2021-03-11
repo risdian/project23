@@ -6,7 +6,6 @@
             <h1><i class="fa fa-tags"></i> {{ $pageTitle }}</h1>
             <p>{{ $subTitle }}</p>
         </div>
-        <a href="{{ route('admin.sale-expert.users.create') }}" class="btn btn-primary pull-right">Add Sale Expert</a>
     </div>
     @include('admin.partials.flash')
     <div class="row">
@@ -22,12 +21,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($sale_expert as $se)
+                            @foreach ($agents as $agent)
                                 <tr>
-                                    <td>{{ $se->id }} </td>
-                                    <td> {{ $se->name }} </td>
+                                    <td>{{ $agent->id }} </td>
+                                    <td> {{ $agent->name }} </td>
                                     <td class="text-center">
-                                        <a href="{{ route('admin.sale-expert.users.view', $se->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                        <a href="{{ route('admin.agent.users.view', $agent->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -27,7 +27,7 @@
                         @foreach($orders as $order)
                             <tr>
                                 <td>{{ $order->order_number }}</td>
-                                <td>{{ $order->user->fullName }}</td>
+                                <td>{{ $order->user->name }}</td>
                                 <td class="text-center">{{ config('settings.currency_symbol') }}{{ $order->grand_total }}</td>
                                 <td class="text-center">{{ $order->item_count }}</td>
                                 <td class="text-center">
@@ -38,7 +38,15 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge badge-success">{{ $order->status }}</span>
+                                    @if ($order->status == 'pending')
+                                        <span class="badge badge-warning">{{ $order->status }}</span>
+                                    @elseif($order->status == 'processing')
+                                        <span class="badge badge-info">{{ $order->status }}</span>
+                                    @elseif($order->status == 'completed')
+                                        <span class="badge badge-success">{{ $order->status }}</span>
+                                    @elseif($order->status == 'decline')
+                                        <span class="badge badge-danger">{{ $order->status }}</span>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group" aria-label="Second group">

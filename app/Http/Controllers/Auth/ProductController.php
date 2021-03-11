@@ -57,8 +57,6 @@ class ProductController extends BaseController
             $items = Item::where('user_id', Auth()->user()->parent_id)
             ->get();
 
-
-
             foreach($items as $item) {
 
                 $products[] =  $item->products()->with(
@@ -66,7 +64,6 @@ class ProductController extends BaseController
                             $query->where('user_id', Auth()->user()->id);
                         }))
                         ->get();
-
             }
 
             $new = [];

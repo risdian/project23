@@ -179,6 +179,8 @@ return [
         App\Providers\ViewComposerServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+
 
     ],
 

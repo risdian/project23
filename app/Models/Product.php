@@ -23,6 +23,7 @@ class Product extends Model
         'name',
         'user_id',
         'branch_id',
+        'brand_id',
         'categories',
         'sku',
         'slug',
@@ -36,7 +37,6 @@ class Product extends Model
         'sale_price',
         'status',
         'featured',
-        'detail_image',
         'counter',
     ];
 
@@ -46,6 +46,9 @@ class Product extends Model
     protected $casts = [
         'quantity'      =>  'integer',
         'user_id'       =>  'integer',
+        'branch_id'     =>  'integer',
+        'brand_id'      =>  'integer',
+        'categories'    =>  'integer',
         'status'        =>  'boolean',
         'featured'      =>  'boolean'
     ];
