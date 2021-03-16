@@ -97,6 +97,13 @@ Route::group([
 
         });
 
+
+        Route::group(['prefix'  =>   'productshipping'], function() {
+
+            Route::get('/{id}/{shipping_method}/{postcode}', 'Auth\ShippingController@select');
+
+        });
+
         Route::group(['prefix'  =>   'orders'], function() {
             Route::group(['prefix'  =>   'sale-expert'], function() {
 

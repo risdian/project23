@@ -38,6 +38,7 @@ class Product extends Model
         'status',
         'featured',
         'counter',
+        'cost',
     ];
 
     /**

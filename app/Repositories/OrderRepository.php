@@ -83,11 +83,9 @@ class OrderRepository extends BaseRepository implements OrderContract
                 $product = Product::find($item['id']);
                 $product->decrement('quantity', $item['amount']);
 
-                $item_id_array[$item['id']] = ['price' => $price, 'quantity' => $item['amount']];
+                $item_id_array[$item['id']] = ['price' => $price, 'quantity' => $item['amount'], 'shipping' => $item['shipping'], 'shipping_price' => $item['shipping_price']];
 
             }
-
-
 
             //Insert into order_products table
             $order->products()->sync($item_id_array);//dont delete old entries = false

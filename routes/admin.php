@@ -15,6 +15,38 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/settings', 'Admin\SettingController@index')->name('admin.settings');
         Route::post('/settings', 'Admin\SettingController@update')->name('admin.settings.update');
 
+        Route::group(['prefix'  =>   'j_n_t'], function() {
+            Route::get('', 'admin\JntController@index')->name('admin.jnt.index');
+            Route::get('/create', 'Admin\JntController@create')->name('admin.jnt.create');
+            Route::post('/store', 'Admin\JntController@store')->name('admin.jnt.store');
+            Route::get('/{id}/edit', 'Admin\JntController@edit')->name('admin.jnt.edit');
+            Route::post('/update', 'Admin\JntController@update')->name('admin.jnt.update');
+            Route::get('/{id}/delete', 'Admin\JntController@delete')->name('admin.jnt.delete');
+
+
+        });
+
+        Route::group(['prefix'  =>   'couriers'], function() {
+
+            Route::get('', 'admin\CourierController@index')->name('admin.couriers.index');
+            Route::get('/create', 'Admin\CourierController@create')->name('admin.couriers.create');
+            Route::post('/store', 'Admin\CourierController@store')->name('admin.couriers.store');
+            Route::get('/{id}/edit', 'Admin\CourierController@edit')->name('admin.couriers.edit');
+            Route::post('/update', 'Admin\CourierController@update')->name('admin.couriers.update');
+
+
+        });
+
+        Route::group(['prefix'  =>   'poscode'], function() {
+            Route::get('', 'admin\PoscodeController@index')->name('admin.poscode.index');
+            Route::get('/create', 'Admin\PoscodeController@create')->name('admin.poscode.create');
+            Route::post('/store', 'Admin\PoscodeController@store')->name('admin.poscode.store');
+            Route::get('/{id}/edit', 'Admin\PoscodeController@edit')->name('admin.poscode.edit');
+            Route::post('/update', 'Admin\PoscodeController@update')->name('admin.poscode.update');
+            Route::get('/{id}/delete', 'Admin\PoscodeController@delete')->name('admin.poscode.delete');
+        });
+
+
         Route::group(['prefix'  =>   'roles'], function() {
 
             Route::get('', 'Admin\roleController@index')->name('admin.roles.index');

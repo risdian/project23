@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Item;
+use App\Models\Poscode;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Contracts\BrandContract;
+use App\Contracts\BranchContract;
 use App\Contracts\ProductContract;
 use App\Contracts\CategoryContract;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\StoreProductFormRequest;
-use App\Models\Item;
-use App\Models\ProductImage;
+use App\Models\Courier;
 
 class ProductController extends BaseController
 {
     protected $brandRepository;
+
+    protected $branchRepository;
 
     protected $categoryRepository;
 
@@ -24,10 +29,12 @@ class ProductController extends BaseController
     public function __construct(
         BrandContract $brandRepository,
         CategoryContract $categoryRepository,
-        ProductContract $productRepository
+        ProductContract $productRepository,
+        BranchContract $branchRepository
     )
     {
         $this->brandRepository = $brandRepository;
+        $this->branchRepository = $branchRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
     }
@@ -93,7 +100,10 @@ class ProductController extends BaseController
             $query->where('user_id', Auth()->user()->id);
         })
         )->find($id);
-        return response()->json($product);
+
+        $couriers = Courier::all();
+
+        return response()->json(['product' => $product, 'couriers' => $couriers]);
 
     }
 
@@ -108,9 +118,10 @@ class ProductController extends BaseController
     {
         $brands = $this->brandRepository->listBrands('name', 'asc');
         $categories = $this->categoryRepository->listCategories('name', 'asc');
-
+        $branches = $this->branchRepository->listBranches('name', 'asc');
         return response()->json([
             'brands' => $brands,
+            'branches' => $branches,
             'categories' => $categories
         ]);
 
@@ -128,6 +139,7 @@ class ProductController extends BaseController
                 'message' => 'Unauthorized'
             ], 401);
         }
+
         return response()->json($product);
 
 
@@ -136,9 +148,20 @@ class ProductController extends BaseController
     public function edit($id)
     {
 
-        $product = Product::with('images', 'branch')->findOrFail($id);
+        $brands = $this->brandRepository->listBrands('name', 'asc');
+        $categories = $this->categoryRepository->listCategories('name', 'asc');
+        $branches = $this->branchRepository->listBranches('name', 'asc');
 
-        return response()->json($product);
+        $product = Product::findOrFail($id);
+        $images = $product->images;
+
+        return response()->json([
+            'brands' => $brands,
+            'branches' => $branches,
+            'categories' => $categories,
+            'product' => $product,
+            'images'    => $images,
+        ]);
 
     }
 

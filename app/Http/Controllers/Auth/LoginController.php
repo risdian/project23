@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -43,7 +44,17 @@ class LoginController extends Controller
 
     protected function credentials(Request $request)
     {
-        return array_merge($request->only($this->username(), 'password'),
-        ['status' => 'admin']);
+        return array_merge($request->only($this->username(), 'password'));
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        //Check user role, if it is not admin then logout
+        if(!$user->hasRole(['Admin', 'Super Admin']))
+        {
+            $this->guard()->logout();
+            $request->session()->invalidate();
+            return redirect('/login')->withErrors('You are unauthorized to login');
+        }
     }
 }

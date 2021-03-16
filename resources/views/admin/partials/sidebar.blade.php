@@ -56,6 +56,26 @@
                 <span class="app-menu__label">Settings</span>
             </a>
         </li>
+        <li>
+            <a class="app-menu__item {{ Route::currentRouteName() == 'admin.jnt.index' ? 'active' : '' }}" href="{{ route('admin.jnt.index') }}">
+                <i class="app-menu__icon fa fa-bar-chart"></i>
+                <span class="app-menu__label">Shipping Rate J&T</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="app-menu__item {{ Route::currentRouteName() == 'admin.couriers.index' ? 'active' : '' }}" href="{{ route('admin.couriers.index') }}">
+                <i class="app-menu__icon fa fa-bar-chart"></i>
+                <span class="app-menu__label">Courier</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="app-menu__item {{ Route::currentRouteName() == 'admin.poscode.index' ? 'active' : '' }}" href="{{ route('admin.poscode.index') }}">
+                <i class="app-menu__icon fa fa-bar-chart"></i>
+                <span class="app-menu__label">Poscode</span>
+            </a>
+        </li>
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Sale Expert</span><i class="treeview-indicator fa fa-angle-right"></i></a>
             <ul class="treeview-menu">
               <li>

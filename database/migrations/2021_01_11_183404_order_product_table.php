@@ -19,6 +19,8 @@ class OrderProductTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->decimal('price', 20, 2)->nullable();
             $table->decimal('quantity', 20, 2)->nullable();
+            $table->string('shipping')->nullable();
+            $table->decimal('shipping_price', 20, 2)->nullable();
             $table->string('tracking_number')->nullable();
             $table->string('tracking_status')->nullable();
             $table->dateTime('tracking_datetime')->nullable();

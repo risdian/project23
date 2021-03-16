@@ -9,7 +9,7 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
-        'order_number', 'user_id', 'status', 'grand_total', 'item_count', 'sub_total', 'tax', 'delivery_method','delivery_price',
+        'order_number', 'user_id', 'status', 'grand_total', 'item_count', 'sub_total', 'tax', 'shipping_price',
         'payment_status',
         'payment_method',
         'payment_code',
@@ -33,7 +33,7 @@ class Order extends Model
 
     public function products(){
 
-        return $this->belongsToMany(Product::class)->withPivot(['id', 'price', 'quantity', 'tracking_status', 'tracking_number', 'tracking_datetime'])->withTimestamps();
+        return $this->belongsToMany(Product::class)->withPivot(['id', 'price', 'quantity', 'shipping', 'shipping_price','tracking_status', 'tracking_number', 'tracking_datetime'])->withTimestamps();
 
     }
 

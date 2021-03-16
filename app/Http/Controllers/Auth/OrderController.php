@@ -396,8 +396,6 @@ class OrderController extends BaseController
             'country'           => 'required|string|min:5|max:255',
             'postcode'          => 'required|digits_between:5,8',
             'phone_number'      => 'required|regex:/^(\+?6?01)[0-46-9]-*[0-9]{7,8}$/',
-            'delivery_method'   => 'required',
-            'delivery_price'    => 'required|regex:/^\d+(\.\d{1,2})?$/',
 
         ]);
 

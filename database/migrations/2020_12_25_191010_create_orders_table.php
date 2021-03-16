@@ -33,8 +33,8 @@ class CreateOrdersTable extends Migration
             $table->dateTime('payment_datetime')->nullable();
             $table->string('payment_transaction_id')->nullable();
 
-            $table->string('delivery_method')->nullable();
-            $table->string('delivery_price')->nullable();
+            // $table->string('delivery_method')->nullable();
+            $table->decimal('shipping_price', 20, 2)->nullable();
 
             $table->decimal('ps_commission');
             $table->decimal('agent_commission');
